@@ -17,7 +17,16 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'firstname', 'lastname', 'username', 'email', 'password', 'phone', 'statut', 'avatar', 'role_id','is_all_warehouses'
+        'firstname',
+        'lastname',
+        'username',
+        'email',
+        'password',
+        'phone',
+        'statut',
+        'avatar',
+        'role_id',
+        'is_all_warehouses'
     ];
 
     /**
@@ -26,7 +35,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -69,4 +79,8 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Models\Warehouse');
     }
 
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
 }
