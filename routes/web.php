@@ -6,8 +6,6 @@ use App\Http\Controllers\BaseController;
 use Modules\Store\Http\Controllers\StoreController;
 use Laravel\passport\Passport;
 
-use App\Http\Controllers\AuthController;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,15 +20,10 @@ use App\Http\Controllers\AuthController;
 //------------------------------------------------------------------\\
 // Passport::routes();
 
-Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
-
-
 Route::post('/login', [
     'uses' => 'Auth\LoginController@login',
     'middleware' => 'Is_Active',
 ]);
-
-
 
 Route::get('password/find/{token}', 'PasswordResetController@find');
 
