@@ -66,6 +66,11 @@
                   <u>{{$t('Forgot_Password')}}</u>
                 </a>
               </div>
+              <div class="mt-3 text-center">
+                <a href="/password/reset"  class="text-muted">
+                  <u>{{$t('Forgot_Password')}}</u>
+                </a>
+              </div>
             </div>
           </div>
         </div>
