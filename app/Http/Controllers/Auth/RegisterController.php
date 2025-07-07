@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
+
+use App\Models\User;
+use \Nwidart\Modules\Facades\Module;
+
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use App\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class RegisterController extends Controller
 {
@@ -70,4 +74,33 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
     }
+
+    public function showRegisterForm()
+    {
+        return dd('Register form is working');
+    }
+
+    // public function showRegisterForm()
+    // {
+    //     $allModules = \Nwidart\Modules\Facades\Module::all();
+    //     $allEnabledModules = \Nwidart\Modules\Facades\Module::allEnabled();
+
+    //     $ModulesInstalled = [];
+    //     $ModulesEnabled = [];
+
+    //     foreach ($allModules as $key => $modules_name) {
+    //         $ModulesInstalled[] = $key;
+    //     }
+
+    //     foreach ($allEnabledModules as $key => $modules_name) {
+    //         $ModulesEnabled[] = $key;
+    //     }
+
+    //     return view('auth.register', [
+    //         'ModulesInstalled' => $ModulesInstalled,
+    //         'ModulesEnabled' => $ModulesEnabled,
+    //     ]);
+
+    // }
+
 }

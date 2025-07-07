@@ -67,8 +67,9 @@
                 </a>
               </div>
               <div class="mt-3 text-center">
-                <a href="/password/reset"  class="text-muted">
-                  <u>{{$t('Forgot_Password')}}</u>
+                Dont have an account?
+                <a href="/register"  class="text-muted">
+                  <u>{{$t('Register')}}</u>
                 </a>
               </div>
             </div>

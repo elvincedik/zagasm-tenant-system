@@ -15,7 +15,11 @@ const baseRoutes = [
     {
         path: '/register',
         name: 'register',
-        component: () => import('./views/Register.vue')
+        // component: () => import('./views/Register.vue')
+        component: () =>
+            import(
+                /* webpackChunkName: "dashboard" */ "./views/Register"
+            )
     },
     {
         path: "/",
