@@ -75,32 +75,29 @@ class RegisterController extends Controller
         ]);
     }
 
+    
+
     public function showRegisterForm()
     {
-        return dd('Register form is working');
+        $allModules = \Nwidart\Modules\Facades\Module::all();
+        $allEnabledModules = \Nwidart\Modules\Facades\Module::allEnabled();
+
+        $ModulesInstalled = [];
+        $ModulesEnabled = [];
+
+        foreach ($allModules as $key => $modules_name) {
+            $ModulesInstalled[] = $key;
+        }
+
+        foreach ($allEnabledModules as $key => $modules_name) {
+            $ModulesEnabled[] = $key;
+        }
+
+        return view('auth.register', [
+            'ModulesInstalled' => $ModulesInstalled,
+            'ModulesEnabled' => $ModulesEnabled,
+        ]);
+
     }
-
-    // public function showRegisterForm()
-    // {
-    //     $allModules = \Nwidart\Modules\Facades\Module::all();
-    //     $allEnabledModules = \Nwidart\Modules\Facades\Module::allEnabled();
-
-    //     $ModulesInstalled = [];
-    //     $ModulesEnabled = [];
-
-    //     foreach ($allModules as $key => $modules_name) {
-    //         $ModulesInstalled[] = $key;
-    //     }
-
-    //     foreach ($allEnabledModules as $key => $modules_name) {
-    //         $ModulesEnabled[] = $key;
-    //     }
-
-    //     return view('auth.register', [
-    //         'ModulesInstalled' => $ModulesInstalled,
-    //         'ModulesEnabled' => $ModulesEnabled,
-    //     ]);
-
-    // }
 
 }

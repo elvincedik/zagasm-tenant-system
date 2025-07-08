@@ -4,6 +4,7 @@ use Laravel\passport\Passport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Auth\RegisterController;
 use Modules\Store\Http\Controllers\StoreController;
@@ -34,6 +35,8 @@ Route::post('/register', [
     'uses' => 'Auth\RegisterController@login',
     'middleware' => 'Is_Active',
 ]);
+
+Route::post('/register', [AuthController::class, 'register']);
 
 
 
@@ -138,11 +141,7 @@ Route::group(['middleware' => ['web', 'auth:web', 'Is_Active']], function () {
     });
 
 
-    // Route::get('/register', [RegisterControllerTwo::class, 'showRegisterFormTwo']);
-    // Route::get('/register', [RegisterController::class, 'showRegisterForm']);
-    // Route::get('/register', 'RegisterControllerTwo@showRegisterFormTwo');
-    // Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register.form');
-
+    
 
 
 

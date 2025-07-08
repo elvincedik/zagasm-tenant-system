@@ -105,4 +105,8 @@ class AuthController extends BaseController
             'organization' => $organization,
         ]);
     }
+
+    // public function register(Request $request) {
+    //     dd("hi");
+    // }
 }

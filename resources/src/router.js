@@ -12,15 +12,15 @@ Vue.use(Router);
 // create new router
 
 const baseRoutes = [
-    {
-        path: '/register',
-        name: 'register',
-        // component: () => import('./views/Register.vue')
-        component: () =>
-            import(
-                /* webpackChunkName: "dashboard" */ "./views/Register"
-            )
-    },
+    // {
+    //     path: '/register',
+    //     name: 'register',
+    //     // component: () => import('./views/Register.vue')
+    //     component: () =>
+    //         import(
+    //             /* webpackChunkName: "dashboard" */ "./views/Register"
+    //         )
+    // },
     {
         path: "/",
         component: () => import("./views/app"),
