@@ -58,36 +58,38 @@ class RegisterController extends Controller
             'organization_id' => $organization->id,
         ]);
 
-        $client = Client::create([
-            // 'id' => $user->id,
-            'name' => $data['firstname'] . ' ' . $data['lastname'],
-            'code' => $user->id,
-            'email' => $data['email'],
-            'country' => 'Nigeria',
-            'city' => 'Unknown',
-            'phone' => $data['phone'] ?? '0000000000',
-            'adresse' => 'Unknown Address',
-            'tax_number' => null,
-        ]);
+        $user->roles()->attach(1);
 
-        // Create Settings for the new client
-        Setting::create([
-            'client_id' => $client->id,
-            'email' => $data['email'],
-            'currency_id' => 1,
-            'is_invoice_footer' => 0,
-            'invoice_footer' => null,
-            'warehouse_id' => null,
-            'CompanyName' => $data['firstname'] . ' ' . $data['lastname'],
-            'CompanyPhone' => $data['phone'] ?? '0000000000',
-            'CompanyAdress' => 'Enter your address here',
-            'footer' => 'Stocky - Ultimate Inventory With POS',
-            'developed_by' => 'Stocky',
-            'logo' => 'logo-default.png',
-            'app_name' => 'Stocky | Ultimate Inventory With POS',
-            'page_title_suffix' => 'Ultimate Inventory With POS',
-            'favicon' => 'favicon.ico',
-        ]);
+        // $client = Client::create([
+        //     // 'id' => $user->id,
+        //     'name' => $data['firstname'] . ' ' . $data['lastname'],
+        //     'code' => $user->id,
+        //     'email' => $data['email'],
+        //     'country' => 'Nigeria',
+        //     'city' => 'Unknown',
+        //     'phone' => $data['phone'] ?? '0000000000',
+        //     'adresse' => 'Unknown Address',
+        //     'tax_number' => null,
+        // ]);
+
+        // // Create Settings for the new client
+        // Setting::create([
+        //     'client_id' => $client->id,
+        //     'email' => $data['email'],
+        //     'currency_id' => 1,
+        //     'is_invoice_footer' => 0,
+        //     'invoice_footer' => null,
+        //     'warehouse_id' => null,
+        //     'CompanyName' => $data['firstname'] . ' ' . $data['lastname'],
+        //     'CompanyPhone' => $data['phone'] ?? '0000000000',
+        //     'CompanyAdress' => 'Enter your address here',
+        //     'footer' => 'Stocky - Ultimate Inventory With POS',
+        //     'developed_by' => 'Stocky',
+        //     'logo' => 'logo-default.png',
+        //     'app_name' => 'Stocky | Ultimate Inventory With POS',
+        //     'page_title_suffix' => 'Ultimate Inventory With POS',
+        //     'favicon' => 'favicon.ico',
+        // ]);
 
         return $user;
     }
