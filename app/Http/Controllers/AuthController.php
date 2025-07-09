@@ -64,6 +64,48 @@ class AuthController extends BaseController
     }
 
 
+    // public function register(Request $request)
+    // {
+    //     $request->validate([
+    //         'organization_name' => 'required|string|max:255',
+    //         'firstname' => 'required|string|max:255',
+    //         'lastname' => 'required|string|max:255',
+    //         'username' => 'required|string|max:255',
+    //         'email' => 'required|string|email|max:255|unique:users',
+    //         'password' => 'required|string|min:6|confirmed',
+    //         'phone' => 'nullable|string|max:20',
+    //     ]);
+
+    //     // Create organization
+    //     $organization = Organization::create([
+    //         'name' => $request->organization_name,
+    //     ]);
+
+    //     // Create user
+    //     $user = User::create([
+    //         'firstname' => $request->firstname,
+    //         'lastname' => $request->lastname,
+    //         'username' => $request->username,
+    //         'email' => $request->email,
+    //         'password' => Hash::make($request->password),
+    //         'phone' => $request->phone,
+    //         'avatar' => 'no_avatar.png',      // default
+    //         'role_id' => 1,                   // default admin role
+    //         'statut' => 1,                    // active
+    //         'is_all_warehouses' => 1,         // full access
+    //         'organization_id' => $organization->id, // link to org
+    //     ]);
+
+    //     // Issue token
+    //     $token = $user->createToken('auth_token')->plainTextToken;
+
+    //     return response()->json([
+    //         'access_token' => $token,
+    //         'user' => $user,
+    //         'organization' => $organization,
+    //     ]);
+    // }
+
     public function register(Request $request)
     {
         $request->validate([
@@ -72,7 +114,7 @@ class AuthController extends BaseController
             'lastname' => 'required|string|max:255',
             'username' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:6', // ✅ updated here
             'phone' => 'nullable|string|max:20',
         ]);
 
@@ -89,11 +131,11 @@ class AuthController extends BaseController
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'phone' => $request->phone,
-            'avatar' => 'no_avatar.png',      // default
-            'role_id' => 1,                   // default admin role
-            'statut' => 1,                    // active
-            'is_all_warehouses' => 1,         // full access
-            'organization_id' => $organization->id, // link to org
+            'avatar' => 'no_avatar.png',
+            'role_id' => 1,
+            'statut' => 1,
+            'is_all_warehouses' => 1,
+            'organization_id' => $organization->id,
         ]);
 
         // Issue token
@@ -105,6 +147,7 @@ class AuthController extends BaseController
             'organization' => $organization,
         ]);
     }
+
 
     // public function register(Request $request) {
     //     dd("hi");

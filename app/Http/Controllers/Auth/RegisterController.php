@@ -2,80 +2,95 @@
 
 namespace App\Http\Controllers\Auth;
 
-
 use App\Models\User;
-use \Nwidart\Modules\Facades\Module;
-
+use App\Models\Client;
+use App\Models\Setting;
+use App\Models\Organization;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
     use RegistersUsers;
 
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest');
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'organization_name' => ['required', 'string', 'max:255'],
+            'firstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:6'],
+            'phone' => ['nullable', 'string', 'max:20'],
         ]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
+        // Create organization
+        $organization = Organization::create([
+            'name' => $data['organization_name'],
+        ]);
+
+        // Create user
+        $user = User::create([
+            'firstname' => $data['firstname'],
+            'lastname' => $data['lastname'],
+            'username' => $data['username'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'phone' => $data['phone'],
+            'avatar' => 'no_avatar.png',
+            'role_id' => 1,
+            'statut' => 1,
+            'is_all_warehouses' => 1,
+            'organization_id' => $organization->id,
         ]);
-    }
 
-    
+        $client = Client::create([
+            // 'id' => $user->id,
+            'name' => $data['firstname'] . ' ' . $data['lastname'],
+            'code' => $user->id,
+            'email' => $data['email'],
+            'country' => 'Nigeria',
+            'city' => 'Unknown',
+            'phone' => $data['phone'] ?? '0000000000',
+            'adresse' => 'Unknown Address',
+            'tax_number' => null,
+        ]);
+
+        // Create Settings for the new client
+        Setting::create([
+            'client_id' => $client->id,
+            'email' => $data['email'],
+            'currency_id' => 1,
+            'is_invoice_footer' => 0,
+            'invoice_footer' => null,
+            'warehouse_id' => null,
+            'CompanyName' => $data['firstname'] . ' ' . $data['lastname'],
+            'CompanyPhone' => $data['phone'] ?? '0000000000',
+            'CompanyAdress' => 'Enter your address here',
+            'footer' => 'Stocky - Ultimate Inventory With POS',
+            'developed_by' => 'Stocky',
+            'logo' => 'logo-default.png',
+            'app_name' => 'Stocky | Ultimate Inventory With POS',
+            'page_title_suffix' => 'Ultimate Inventory With POS',
+            'favicon' => 'favicon.ico',
+        ]);
+
+        return $user;
+    }
 
     public function showRegisterForm()
     {
@@ -97,7 +112,5 @@ class RegisterController extends Controller
             'ModulesInstalled' => $ModulesInstalled,
             'ModulesEnabled' => $ModulesEnabled,
         ]);
-
     }
-
 }
