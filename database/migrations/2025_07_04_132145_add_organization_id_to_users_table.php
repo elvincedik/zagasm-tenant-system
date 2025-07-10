@@ -11,9 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('organization_id')->nullable()->constrained()->onDelete('cascade');
-        });
+        // Only add column if it doesn't already exist
+        if (!Schema::hasColumn('users', 'organization_id')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->unsignedBigInteger('organization_id')->nullable()->after('id');
+
+                // Add foreign key constraint if necessary
+                $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('cascade');
+            });
+        }
     }
 
     /**
@@ -21,8 +27,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
+        // Only drop column if it exists
+        if (Schema::hasColumn('users', 'organization_id')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->dropForeign(['organization_id']);
+                $table->dropColumn('organization_id');
+            });
+        }
     }
 };
