@@ -112,6 +112,7 @@ Route::group(['middleware' => ['web', 'auth:web', 'Is_Active']], function () {
             return redirect('/login');
         }
     });
+    
 
 
     Route::get('/{vue?}',
