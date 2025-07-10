@@ -26,7 +26,8 @@ class User extends Authenticatable
         'statut',
         'avatar',
         'role_id',
-        'is_all_warehouses'
+        'is_all_warehouses',
+        'organization_id',
     ];
 
     /**
