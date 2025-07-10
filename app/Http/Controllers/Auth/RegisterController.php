@@ -2,72 +2,86 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\User;
+use App\Models\Client;
+use App\Models\Setting;
+use App\Models\Organization;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use App\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
     use RegistersUsers;
 
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest');
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'organization_name' => ['required', 'string', 'max:255'],
+            'firstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:6'],
+            'phone' => ['nullable', 'string', 'max:20'],
         ]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
+        // Create organization
+        $organization = Organization::create([
+            'name' => $data['organization_name'],
+        ]);
+
+        // Create user
+        $user = User::create([
+            'firstname' => $data['firstname'],
+            'lastname' => $data['lastname'],
+            'username' => $data['username'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'phone' => $data['phone'],
+            'avatar' => 'no_avatar.png',
+            'role_id' => 1,
+            'statut' => 1,
+            'is_all_warehouses' => 1,
+            'organization_id' => $organization->id,
+        ]);
+
+        $user->roles()->attach(1);
+
+        return $user;
+    }
+
+    public function showRegisterForm()
+    {
+        $allModules = \Nwidart\Modules\Facades\Module::all();
+        $allEnabledModules = \Nwidart\Modules\Facades\Module::allEnabled();
+
+        $ModulesInstalled = [];
+        $ModulesEnabled = [];
+
+        foreach ($allModules as $key => $modules_name) {
+            $ModulesInstalled[] = $key;
+        }
+
+        foreach ($allEnabledModules as $key => $modules_name) {
+            $ModulesEnabled[] = $key;
+        }
+
+        return view('auth.register', [
+            'ModulesInstalled' => $ModulesInstalled,
+            'ModulesEnabled' => $ModulesEnabled,
         ]);
     }
 }
