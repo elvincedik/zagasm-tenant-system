@@ -83,6 +83,7 @@ axios.interceptors.response.use((response) => {
 window.Fire = new Vue();
 
 Vue.component('login-component', require('./views/app/sessions/signIn.vue').default);
+Vue.component('register-component', require('./views/app/sessions/register.vue').default);
 Vue.component('forgot-component', require('./views/app/sessions/forgot.vue').default);
 Vue.component('reset-component', require('./views/app/sessions/reset.vue').default);
 

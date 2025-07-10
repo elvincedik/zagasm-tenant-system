@@ -66,6 +66,12 @@
                   <u>{{$t('Forgot_Password')}}</u>
                 </a>
               </div>
+              <div class="mt-3 text-center">
+                Dont have an account?
+                <a href="/register"  class="text-muted">
+                  <u>{{$t('Register')}}</u>
+                </a>
+              </div>
             </div>
           </div>
         </div>

@@ -1,10 +1,14 @@
 <?php
 
+use Laravel\passport\Passport;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Auth\RegisterController;
 use Modules\Store\Http\Controllers\StoreController;
-use Laravel\passport\Passport;
+use App\Http\Controllers\Auth\RegisterControllerTwo;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,10 +24,21 @@ use Laravel\passport\Passport;
 //------------------------------------------------------------------\\
 // Passport::routes();
 
+
+
 Route::post('/login', [
     'uses' => 'Auth\LoginController@login',
     'middleware' => 'Is_Active',
 ]);
+
+Route::post('/register', [
+    'uses' => 'Auth\RegisterController@login',
+    'middleware' => 'Is_Active',
+]);
+
+Route::post('/register', [AuthController::class, 'register']);
+
+
 
 Route::get('password/find/{token}', 'PasswordResetController@find');
 
@@ -42,11 +57,13 @@ if ($installed === false) {
     ]);
 
     Route::post('/setup/step-2', [
-        'as' => 'setupStep1', 'uses' => 'SetupController@setupStep1',
+        'as' => 'setupStep1',
+        'uses' => 'SetupController@setupStep1',
     ]);
 
     Route::post('/setup/testDB', [
-        'as' => 'testDB', 'uses' => 'TestDbController@testDB',
+        'as' => 'testDB',
+        'uses' => 'TestDbController@testDB',
     ]);
 
     Route::get('/setup/step-2', [
@@ -63,43 +80,53 @@ if ($installed === false) {
     });
 
     Route::get('/setup/getNewAppKey', [
-        'as' => 'getNewAppKey', 'uses' => 'SetupController@getNewAppKey',
+        'as' => 'getNewAppKey',
+        'uses' => 'SetupController@getNewAppKey',
     ]);
 
     Route::get('/setup/getPassport', [
-        'as' => 'getPassport', 'uses' => 'SetupController@getPassport',
+        'as' => 'getPassport',
+        'uses' => 'SetupController@getPassport',
     ]);
 
     Route::get('/setup/getMegrate', [
-        'as' => 'getMegrate', 'uses' => 'SetupController@getMegrate',
+        'as' => 'getMegrate',
+        'uses' => 'SetupController@getMegrate',
     ]);
 
     Route::post('/setup/step-3', [
-        'as' => 'setupStep2', 'uses' => 'SetupController@setupStep2',
+        'as' => 'setupStep2',
+        'uses' => 'SetupController@setupStep2',
     ]);
 
     Route::post('/setup/step-4', [
-        'as' => 'setupStep3', 'uses' => 'SetupController@setupStep3',
+        'as' => 'setupStep3',
+        'uses' => 'SetupController@setupStep3',
     ]);
 
     Route::post('/setup/step-5', [
-        'as' => 'setupStep4', 'uses' => 'SetupController@setupStep4',
+        'as' => 'setupStep4',
+        'uses' => 'SetupController@setupStep4',
     ]);
 
     Route::post('/setup/lastStep', [
-        'as' => 'lastStep', 'uses' => 'SetupController@lastStep',
+        'as' => 'lastStep',
+        'uses' => 'SetupController@lastStep',
     ]);
 
     Route::get('setup/lastStep', function () {
         return redirect('/setup', 301);
     });
-
 } else {
     Route::any('/setup/{vue}', function () {
         abort(403);
     });
 }
 
+// Route::get('/register', function () {
+//     // dd('Route is working!');
+// });
+Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register.form');
 //------------------------------------------------------------------\\
 
 Route::group(['middleware' => ['web', 'auth:web', 'Is_Active']], function () {
@@ -114,26 +141,35 @@ Route::group(['middleware' => ['web', 'auth:web', 'Is_Active']], function () {
     });
 
 
-    Route::get('/{vue?}',
-      function () {
-        $installed = Storage::disk('public')->exists('installed');
-        $ModulesData = BaseController::get_Module_Info();
+    
 
-        if ($installed === false) {
-            return redirect('/setup');
-        } else {
-            return view('layouts.master' , [
-                'ModulesInstalled' => $ModulesData['ModulesInstalled'],
-                'ModulesEnabled' => $ModulesData['ModulesEnabled'],
-            ]);
+
+
+
+
+
+
+    Route::get(
+        '/{vue?}',
+        function () {
+            $installed = Storage::disk('public')->exists('installed');
+            $ModulesData = BaseController::get_Module_Info();
+
+            if ($installed === false) {
+                return redirect('/setup');
+            } else {
+                return view('layouts.master', [
+                    'ModulesInstalled' => $ModulesData['ModulesInstalled'],
+                    'ModulesEnabled' => $ModulesData['ModulesEnabled'],
+                ]);
+            }
         }
-    })->where('vue', '^(?!api|setup|update|update_database_module|password|module|store|online_store).*$');
- 
+    )->where('vue', '^(?!api|setup|update|update_database_module|password|module|store|online_store).*$');
 });
-   
-    Auth::routes([
-        'register' => false,
-    ]);
+
+Auth::routes([
+    'register' => true,
+]);
 
 
 //------------------------- -UPDATE ----------------------------------------\\
@@ -151,11 +187,7 @@ Route::group(['middleware' => ['web', 'auth:web', 'Is_Active']], function () {
     });
 
     Route::post('/update/lastStep', [
-        'as' => 'update_lastStep', 'uses' => 'UpdateController@lastStep',
+        'as' => 'update_lastStep',
+        'uses' => 'UpdateController@lastStep',
     ]);
-
 });
-
-
-
-

@@ -12,6 +12,15 @@ Vue.use(Router);
 // create new router
 
 const baseRoutes = [
+    // {
+    //     path: '/register',
+    //     name: 'register',
+    //     // component: () => import('./views/Register.vue')
+    //     component: () =>
+    //         import(
+    //             /* webpackChunkName: "dashboard" */ "./views/Register"
+    //         )
+    // },
     {
         path: "/",
         component: () => import("./views/app"),
@@ -26,9 +35,9 @@ const baseRoutes = [
                     import(
                         /* webpackChunkName: "dashboard" */ "./views/app/dashboard/dashboard"
                     )
-            
-                },
-               
+
+            },
+
             //Products
             {
                 path: "/app/products",
@@ -97,8 +106,8 @@ const baseRoutes = [
                                 /* webpackChunkName: "count_stock" */ "./views/app/pages/products/count_stock"
                             )
                     },
-                     // categories
-                     {
+                    // categories
+                    {
                         name: "categories",
                         path: "Categories",
                         component: () =>
@@ -205,8 +214,8 @@ const baseRoutes = [
                 ]
             },
 
-             // accounts
-             {
+            // accounts
+            {
                 name: "accounts",
                 path: "/app/accounts",
                 component: () =>
@@ -215,8 +224,8 @@ const baseRoutes = [
                     )
             },
 
-             //Projects
-             {
+            //Projects
+            {
                 path: "/app/projects",
                 component: () =>
                     import(
@@ -255,8 +264,8 @@ const baseRoutes = [
                 ]
             },
 
-             //Tasks
-             {
+            //Tasks
+            {
                 path: "/app/tasks",
                 component: () =>
                     import(
@@ -296,8 +305,8 @@ const baseRoutes = [
             },
 
 
-             // transfer_money
-             {
+            // transfer_money
+            {
                 name: "transfer_money",
                 path: "/app/transfer_money",
                 component: () =>
@@ -306,7 +315,7 @@ const baseRoutes = [
                     )
             },
 
-          
+
 
             //expenses
             {
@@ -745,8 +754,8 @@ const baseRoutes = [
                             import(/* webpackChunkName: "departments" */"./views/app/pages/hrm/department")
                     },
 
-                      // designations
-                      {
+                    // designations
+                    {
                         name: "designations",
                         path: "designations",
                         component: () =>
@@ -761,24 +770,24 @@ const baseRoutes = [
                             import(/* webpackChunkName: "office_shift" */"./views/app/pages/hrm/office_shift")
                     },
 
-                     // attendance
-                     {
+                    // attendance
+                    {
                         name: "attendance",
                         path: "attendance",
                         component: () =>
                             import(/* webpackChunkName: "attendance" */"./views/app/pages/hrm/attendance")
                     },
 
-                      // holidays
-                      {
+                    // holidays
+                    {
                         name: "holidays",
                         path: "holidays",
                         component: () =>
                             import(/* webpackChunkName: "holidays" */"./views/app/pages/hrm/holidays")
                     },
 
-                     // payrolls
-                     {
+                    // payrolls
+                    {
                         name: "payrolls",
                         path: "payrolls",
                         component: () =>
@@ -812,11 +821,11 @@ const baseRoutes = [
                                         "./views/app/pages/hrm/leaves/leave_type"
                                     )
                             },
-                           
+
                         ]
                     },
 
-                    
+
                 ]
             },
 
@@ -839,8 +848,8 @@ const baseRoutes = [
                             )
                     },
 
-                     // Customers
-                     {
+                    // Customers
+                    {
                         name: "Customers_without_ecommerce",
                         path: "Customers_without_ecommerce",
                         component: () =>
@@ -899,7 +908,7 @@ const baseRoutes = [
                                 "./views/app/pages/subscription_product/subscription_product_create"
                             )
                     },
-                 
+
                     {
                         name: "subscription_product_details",
                         path: "detail/:id",
@@ -911,8 +920,8 @@ const baseRoutes = [
                     },
 
 
-                    
-                    
+
+
                 ]
             },
 
@@ -974,8 +983,8 @@ const baseRoutes = [
                             )
                     },
 
-                     // sms_settings
-                     {
+                    // sms_settings
+                    {
                         name: "sms_settings",
                         path: "sms_settings",
                         component: () =>
@@ -984,8 +993,8 @@ const baseRoutes = [
                             )
                     },
 
-                     // sms_templates
-                     {
+                    // sms_templates
+                    {
                         name: "sms_templates",
                         path: "sms_templates",
                         component: () =>
@@ -994,8 +1003,8 @@ const baseRoutes = [
                             )
                     },
 
-                     // email_templates
-                     {
+                    // email_templates
+                    {
                         name: "email_templates",
                         path: "email_templates",
                         component: () =>
@@ -1006,82 +1015,82 @@ const baseRoutes = [
 
                     // appearance_settings
                     {
-                    name: "appearance_settings",
-                    path: "appearance_settings",
-                    component: () =>
-                        import(
+                        name: "appearance_settings",
+                        path: "appearance_settings",
+                        component: () =>
+                            import(
                             /* webpackChunkName: "appearance_settings" */ "./views/app/pages/settings/appearance_settings"
-                        )
+                            )
                     },
 
                     // translations_settings
                     {
-                    name: "translations_settings",
-                    path: "translations_settings",
-                    component: () =>
-                        import(
+                        name: "translations_settings",
+                        path: "translations_settings",
+                        component: () =>
+                            import(
                             /* webpackChunkName: "translations_settings" */ "./views/app/pages/settings/translations_settings"
-                        )
+                            )
                     },
 
                     {
-                    name: "translations_view",
-                    path: "/translations_view/:locale",
-                    component: () =>
-                        import(
+                        name: "translations_view",
+                        path: "/translations_view/:locale",
+                        component: () =>
+                            import(
                         /* webpackChunkName: "translations_view" */ "./views/app/pages/settings/translations_view"
-                        )
+                            )
                     },
 
                     // pos_settings
                     {
-                    name: "pos_settings",
-                    path: "pos_settings",
-                    component: () =>
-                        import(
+                        name: "pos_settings",
+                        path: "pos_settings",
+                        component: () =>
+                            import(
                             /* webpackChunkName: "pos_settings" */ "./views/app/pages/settings/pos_settings"
-                        )
+                            )
                     },
 
-                     // payment_gateway
-                     {
+                    // payment_gateway
+                    {
                         name: "payment_gateway",
                         path: "payment_gateway",
                         component: () =>
                             import(
                                 /* webpackChunkName: "payment_gateway" */ "./views/app/pages/settings/payment_gateway"
                             )
-                        },
+                    },
 
-                        // mail_settings
-                     {
+                    // mail_settings
+                    {
                         name: "mail_settings",
                         path: "mail_settings",
                         component: () =>
                             import(
                                 /* webpackChunkName: "mail_settings" */ "./views/app/pages/settings/mail_settings"
                             )
-                        },
+                    },
 
-                        // module_settings
-                     {
+                    // module_settings
+                    {
                         name: "module_settings",
                         path: "module_settings",
                         component: () =>
                             import(
                                 /* webpackChunkName: "module_settings" */ "./views/app/pages/settings/module_settings"
                             )
-                        },
+                    },
 
-                         // update_settings
-                     {
+                    // update_settings
+                    {
                         name: "update_settings",
                         path: "update_settings",
                         component: () =>
                             import(
                                 /* webpackChunkName: "update_settings" */ "./views/app/pages/settings/update_settings"
                             )
-                        },
+                    },
 
                     // currencies
                     {
@@ -1122,7 +1131,7 @@ const baseRoutes = [
                                 /* webpackChunkName: "System_settings" */ "./views/app/pages/settings/system_settings"
                             )
                     }
-                  
+
                 ]
             },
 
@@ -1179,7 +1188,7 @@ const baseRoutes = [
                             )
                     },
 
-                     {
+                    {
                         name: "report_sales_by_category",
                         path: "report_sales_by_category",
                         component: () =>
@@ -1189,7 +1198,7 @@ const baseRoutes = [
                             )
                     },
 
-                      {
+                    {
                         name: "report_sales_by_brand",
                         path: "report_sales_by_brand",
                         component: () =>
@@ -1199,7 +1208,7 @@ const baseRoutes = [
                             )
                     },
 
-                    
+
 
                     {
                         name: "profit_and_loss",
@@ -1415,7 +1424,7 @@ const baseRoutes = [
                             )
                     },
 
-                      {
+                    {
                         name: "report_error_logs",
                         path: "report_error_logs",
                         component: () =>
@@ -1437,6 +1446,12 @@ const baseRoutes = [
             }
         ]
     },
+
+    // {
+    //     name: 'register',
+    //     path: '/register',
+    //     component: () => import('@/views/Register.vue'),
+    // },
 
     {
         name: "pos",
@@ -1486,55 +1501,55 @@ const router = new Router({
 // Fix redundant navigation error
 const originalPush = Router.prototype.push;
 Router.prototype.push = function push(location, onResolve, onReject) {
-  if (onResolve || onReject)
-    return originalPush.call(this, location, onResolve, onReject);
-  return originalPush.call(this, location).catch(err => err);
+    if (onResolve || onReject)
+        return originalPush.call(this, location, onResolve, onReject);
+    return originalPush.call(this, location).catch(err => err);
 };
 
 // ✅ Export function to set up navigation guards
 export function setupRouterGuards(i18n) {
-  router.beforeEach(async (to, from, next) => {
-    if (to.path) {
-      NProgress.start();
-      NProgress.set(0.1);
-    }
+    router.beforeEach(async (to, from, next) => {
+        if (to.path) {
+            NProgress.start();
+            NProgress.set(0.1);
+        }
 
-    const savedLang = store.state.language.language;
+        const savedLang = store.state.language.language;
 
-    if (savedLang && savedLang !== i18n.locale) {
-      i18n.locale = savedLang;
-    } else if (!savedLang) {
-      await store.dispatch("language/setLanguage", navigator.languages);
-      i18n.locale = store.state.language.language;
-    }
+        if (savedLang && savedLang !== i18n.locale) {
+            i18n.locale = savedLang;
+        } else if (!savedLang) {
+            await store.dispatch("language/setLanguage", navigator.languages);
+            i18n.locale = store.state.language.language;
+        }
 
-    next();
-  });
+        next();
+    });
 
-  router.afterEach(() => {
-    const gullPreLoading = document.getElementById("loading_wrap");
-if (gullPreLoading) {
-    gullPreLoading.style.display = "none";
-}
+    router.afterEach(() => {
+        const gullPreLoading = document.getElementById("loading_wrap");
+        if (gullPreLoading) {
+            gullPreLoading.style.display = "none";
+        }
 
-    setTimeout(() => NProgress.done(), 500);
+        setTimeout(() => NProgress.done(), 500);
 
-    if (window.innerWidth <= 1200) {
-      store.dispatch("changeSidebarProperties");
+        if (window.innerWidth <= 1200) {
+            store.dispatch("changeSidebarProperties");
 
-      if (store.getters.getSideBarToggleProperties.isSecondarySideNavOpen) {
-        store.dispatch("changeSecondarySidebarProperties");
-      }
+            if (store.getters.getSideBarToggleProperties.isSecondarySideNavOpen) {
+                store.dispatch("changeSecondarySidebarProperties");
+            }
 
-      if (store.getters.getCompactSideBarToggleProperties.isSideNavOpen) {
-        store.dispatch("changeCompactSidebarProperties");
-      }
-    } else {
-      if (store.getters.getSideBarToggleProperties.isSecondarySideNavOpen) {
-        store.dispatch("changeSecondarySidebarProperties");
-      }
-    }
-  });
+            if (store.getters.getCompactSideBarToggleProperties.isSideNavOpen) {
+                store.dispatch("changeCompactSidebarProperties");
+            }
+        } else {
+            if (store.getters.getSideBarToggleProperties.isSecondarySideNavOpen) {
+                store.dispatch("changeSecondarySidebarProperties");
+            }
+        }
+    });
 }
 
 
