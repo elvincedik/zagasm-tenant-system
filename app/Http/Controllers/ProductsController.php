@@ -433,6 +433,7 @@ class ProductsController extends BaseController
               
 
                 $Product->image = $filename;
+                $Product->organization_id = Auth::user()->organization_id;
                 $Product->save();
 
 
