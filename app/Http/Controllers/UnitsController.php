@@ -94,6 +94,7 @@ class UnitsController extends BaseController
         }
 
         Unit::create([
+            'organization_id' => auth()->user()->organization_id,
             'name' => $request['name'],
             'ShortName' => $request['ShortName'],
             'base_unit' => $request['base_unit'],
