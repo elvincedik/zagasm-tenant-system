@@ -79,6 +79,7 @@ class BrandsController extends Controller
             $Brand = new Brand;
 
             $Brand->name = $request['name'];
+            $Brand->organization_id = auth()->user()->organization_id;
             $Brand->description = $request['description'];
             $Brand->image = $filename;
             $Brand->save();
