@@ -11,7 +11,12 @@ class CountStock extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'date','user_id', 'warehouse_id','file_stock','category_id'
+        'date',
+        'user_id',
+        'warehouse_id',
+        'file_stock',
+        'category_id',
+        'organization_id',
     ];
 
     protected $casts = [
@@ -30,9 +35,17 @@ class CountStock extends Model
         return $this->belongsTo('App\Models\Warehouse');
     }
 
-     public function category()
+    public function category()
     {
         return $this->belongsTo('App\Models\Category');
     }
 
+    protected static function booted()
+    {
+        static::addGlobalScope('organization', function ($builder) {
+            if (auth()->check()) {
+                $builder->where('organization_id', auth()->user()->organization_id);
+            }
+        });
+    }
 }

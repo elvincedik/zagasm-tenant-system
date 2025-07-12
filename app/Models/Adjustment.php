@@ -9,8 +9,17 @@ class Adjustment extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'date', 'Ref', 'user_id', 'warehouse_id','time',
-        'items', 'notes', 'created_at', 'updated_at', 'deleted_at',
+        'date',
+        'Ref',
+        'user_id',
+        'warehouse_id',
+        'time',
+        'items',
+        'notes',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'organization_id',
     ];
 
     protected $casts = [
@@ -32,5 +41,4 @@ class Adjustment extends Model
     {
         return $this->belongsTo('App\Models\Warehouse');
     }
-
 }

@@ -2048,6 +2048,7 @@ class ProductsController extends BaseController
         
         // Save the file name in the count_stock table
         CountStock::create([
+            'organization_id' => auth()->user()->organization_id,
             'date'         => $request->date,
             'warehouse_id' => $request->warehouse_id,
             'category_id' => $request->category_id,
