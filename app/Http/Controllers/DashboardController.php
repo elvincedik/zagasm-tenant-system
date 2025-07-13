@@ -43,17 +43,17 @@ class DashboardController extends Controller
     public function dashboard_data(Request $request)
     {
         $user_auth = auth()->user();
-        if($user_auth->is_all_warehouses){
+        if ($user_auth->is_all_warehouses) {
             $array_warehouses_id = Warehouse::where('deleted_at', '=', null)->pluck('id')->toArray();
             $warehouses = Warehouse::where('deleted_at', '=', null)->get(['id', 'name']);
-        }else{
+        } else {
             $array_warehouses_id = UserWarehouse::where('user_id', $user_auth->id)->pluck('warehouse_id')->toArray();
             $warehouses = Warehouse::where('deleted_at', '=', null)->whereIn('id', $array_warehouses_id)->get(['id', 'name']);
         }
-                    
-        if(empty($request->warehouse_id)){
+
+        if (empty($request->warehouse_id)) {
             $warehouse_id = 0;
-        }else{
+        } else {
             $warehouse_id = $request->warehouse_id;
         }
 
@@ -75,7 +75,6 @@ class DashboardController extends Controller
             'product_report' => $Top_Products_Year,
             'report_dashboard' => $report_dashboard,
         ]);
-
     }
 
     //----------------- Sales Chart js -----------------------\\
@@ -105,11 +104,11 @@ class DashboardController extends Controller
             ->where(function ($query) use ($warehouse_id, $array_warehouses_id) {
                 if ($warehouse_id !== 0) {
                     return $query->where('warehouse_id', $warehouse_id);
-                }else{
+                } else {
                     return $query->whereIn('warehouse_id', $array_warehouses_id);
                 }
             })
-            
+
             ->groupBy(DB::raw("DATE_FORMAT(date,'%Y-%m-%d')"))
             ->orderBy('date', 'asc')
             ->get([
@@ -129,7 +128,6 @@ class DashboardController extends Controller
         }
 
         return response()->json(['data' => $data, 'days' => $days]);
-
     }
 
     //----------------- Purchases Chart -----------------------\\
@@ -160,7 +158,7 @@ class DashboardController extends Controller
             ->where(function ($query) use ($warehouse_id, $array_warehouses_id) {
                 if ($warehouse_id !== 0) {
                     return $query->where('warehouse_id', $warehouse_id);
-                }else{
+                } else {
                     return $query->whereIn('warehouse_id', $array_warehouses_id);
                 }
             })
@@ -183,7 +181,6 @@ class DashboardController extends Controller
         }
 
         return response()->json(['data' => $data, 'days' => $days]);
-
     }
 
     //-------------------- Get Top 5 Customers -------------\\
@@ -206,7 +203,7 @@ class DashboardController extends Controller
             ->where(function ($query) use ($warehouse_id, $array_warehouses_id) {
                 if ($warehouse_id !== 0) {
                     return $query->where('sales.warehouse_id', $warehouse_id);
-                }else{
+                } else {
                     return $query->whereIn('sales.warehouse_id', $array_warehouses_id);
                 }
             })
@@ -245,7 +242,7 @@ class DashboardController extends Controller
             ->where(function ($query) use ($warehouse_id, $array_warehouses_id) {
                 if ($warehouse_id !== 0) {
                     return $query->where('sales.warehouse_id', $warehouse_id);
-                }else{
+                } else {
                     return $query->whereIn('sales.warehouse_id', $array_warehouses_id);
                 }
             })
@@ -260,7 +257,7 @@ class DashboardController extends Controller
 
         return response()->json($products);
     }
-    
+
 
     //-------------------- General Report dashboard -------------\\
 
@@ -285,7 +282,7 @@ class DashboardController extends Controller
             ->where(function ($query) use ($warehouse_id, $array_warehouses_id) {
                 if ($warehouse_id !== 0) {
                     return $query->where('sales.warehouse_id', $warehouse_id);
-                }else{
+                } else {
                     return $query->whereIn('sales.warehouse_id', $array_warehouses_id);
                 }
             })
@@ -300,130 +297,49 @@ class DashboardController extends Controller
             ->get();
 
         // Stock Alerts
-        $product_warehouse_data = product_warehouse::with('warehouse', 'product' ,'productVariant')
-        ->join('products', 'product_warehouse.product_id', '=', 'products.id')
-        ->where('manage_stock', true)
-        ->whereRaw('qte <= stock_alert')
-        ->where('product_warehouse.deleted_at', null)
-        ->where(function ($query) use ($warehouse_id, $array_warehouses_id) {
-            if ($warehouse_id !== 0) {
-                return $query->where('product_warehouse.warehouse_id', $warehouse_id);
-            }else{
-                return $query->whereIn('product_warehouse.warehouse_id', $array_warehouses_id);
-            }
-        })
+        $product_warehouse_data = product_warehouse::with('warehouse', 'product', 'productVariant')
+            ->join('products', 'product_warehouse.product_id', '=', 'products.id')
+            ->where('manage_stock', true)
+            ->whereRaw('qte <= stock_alert')
+            ->where('product_warehouse.deleted_at', null)
+            ->where(function ($query) use ($warehouse_id, $array_warehouses_id) {
+                if ($warehouse_id !== 0) {
+                    return $query->where('product_warehouse.warehouse_id', $warehouse_id);
+                } else {
+                    return $query->whereIn('product_warehouse.warehouse_id', $array_warehouses_id);
+                }
+            })
 
-        ->take('5')->get();
+            ->take('5')->get();
 
         $stock_alert = [];
         if ($product_warehouse_data->isNotEmpty()) {
 
             foreach ($product_warehouse_data as $product_warehouse) {
-                if ($product_warehouse->qte <= $product_warehouse['product']->stock_alert) {
-                    if ($product_warehouse->product_variant_id !== null) {
-                        $item['code'] = $product_warehouse['productVariant']->name . '-' . $product_warehouse['product']->code;
+                if (
+                    $product_warehouse->product &&
+                    $product_warehouse->qte <= $product_warehouse->product->stock_alert
+                ) {
+                    if ($product_warehouse->product_variant_id !== null && $product_warehouse->productVariant) {
+                        $item['code'] = $product_warehouse->productVariant->name . '-' . $product_warehouse->product->code;
                     } else {
-                        $item['code'] = $product_warehouse['product']->code;
+                        $item['code'] = $product_warehouse->product->code;
                     }
+
                     $item['quantity'] = $product_warehouse->qte;
-                    $item['name'] = $product_warehouse['product']->name;
-                    $item['warehouse'] = $product_warehouse['warehouse']->name;
-                    $item['stock_alert'] = $product_warehouse['product']->stock_alert;
+                    $item['name'] = $product_warehouse->product->name;
+                    $item['warehouse'] = optional($product_warehouse->warehouse)->name;
+                    $item['stock_alert'] = $product_warehouse->product->stock_alert;
+
                     $stock_alert[] = $item;
                 }
             }
-
         }
 
         //---------------- sales
 
         $data['today_sales'] = Sale::where('deleted_at', '=', null)
-        ->whereBetween('date', array($request->from, $request->to))
-        ->where(function ($query) use ($view_records) {
-            if (!$view_records) {
-                return $query->where('user_id', '=', Auth::user()->id);
-            }
-        })
-        ->where(function ($query) use ($warehouse_id, $array_warehouses_id) {
-            if ($warehouse_id !== 0) {
-                return $query->where('warehouse_id', $warehouse_id);
-            }else{
-                return $query->whereIn('warehouse_id', $array_warehouses_id);
-            }
-        })
-        ->get(DB::raw('SUM(GrandTotal)  As sum'))
-        ->first()->sum;
-
-        $data['today_sales'] = number_format($data['today_sales'], 2, '.', ',');
-
-
-        //--------------- return_sales
-
-        $data['return_sales'] = SaleReturn::where('deleted_at', '=', null)
-        ->whereBetween('date', array($request->from, $request->to))
-        ->where(function ($query) use ($view_records) {
-            if (!$view_records) {
-                return $query->where('user_id', '=', Auth::user()->id);
-            }
-        })
-        ->where(function ($query) use ($warehouse_id, $array_warehouses_id) {
-            if ($warehouse_id !== 0) {
-                return $query->where('warehouse_id', $warehouse_id);
-            }else{
-                return $query->whereIn('warehouse_id', $array_warehouses_id);
-            }
-        })
-        ->get(DB::raw('SUM(GrandTotal)  As sum'))
-        ->first()->sum; 
-
-        $data['return_sales'] = number_format($data['return_sales'], 2, '.', ',');
-
-        //------------------- purchases
-
-        $data['today_purchases'] = Purchase::where('deleted_at', '=', null)
-        ->whereBetween('date', array($request->from, $request->to))
-        ->where(function ($query) use ($view_records) {
-            if (!$view_records) {
-                return $query->where('user_id', '=', Auth::user()->id);
-            }
-        })
-        ->where(function ($query) use ($warehouse_id, $array_warehouses_id) {
-            if ($warehouse_id !== 0) {
-                return $query->where('warehouse_id', $warehouse_id);
-            }else{
-                return $query->whereIn('warehouse_id', $array_warehouses_id);
-            }
-        })
-        ->get(DB::raw('SUM(GrandTotal)  As sum'))
-        ->first()->sum;
-
-        $data['today_purchases'] = number_format($data['today_purchases'], 2, '.', ',');
-
-        //------------------------- return_purchases
-
-        $data['return_purchases'] = PurchaseReturn::where('deleted_at', '=', null)
-        ->whereBetween('date', array($request->from, $request->to))
-        ->where(function ($query) use ($view_records) {
-            if (!$view_records) {
-                return $query->where('user_id', '=', Auth::user()->id);
-            }
-        })
-        ->where(function ($query) use ($warehouse_id, $array_warehouses_id) {
-            if ($warehouse_id !== 0) {
-                return $query->where('warehouse_id', $warehouse_id);
-            }else{
-                return $query->whereIn('warehouse_id', $array_warehouses_id);
-            }
-        })
-        ->get(DB::raw('SUM(GrandTotal)  As sum'))
-        ->first()->sum;
-
-        $data['return_purchases'] = number_format($data['return_purchases'], 2, '.', ',');
-
-        $last_sales = [];
-
-        //last sales
-        $Sales = Sale::with('details', 'client', 'facture','warehouse')->where('deleted_at', '=', null)
+            ->whereBetween('date', array($request->from, $request->to))
             ->where(function ($query) use ($view_records) {
                 if (!$view_records) {
                     return $query->where('user_id', '=', Auth::user()->id);
@@ -432,7 +348,92 @@ class DashboardController extends Controller
             ->where(function ($query) use ($warehouse_id, $array_warehouses_id) {
                 if ($warehouse_id !== 0) {
                     return $query->where('warehouse_id', $warehouse_id);
-                }else{
+                } else {
+                    return $query->whereIn('warehouse_id', $array_warehouses_id);
+                }
+            })
+            ->get(DB::raw('SUM(GrandTotal)  As sum'))
+            ->first()->sum;
+
+        $data['today_sales'] = number_format($data['today_sales'], 2, '.', ',');
+
+
+        //--------------- return_sales
+
+        $data['return_sales'] = SaleReturn::where('deleted_at', '=', null)
+            ->whereBetween('date', array($request->from, $request->to))
+            ->where(function ($query) use ($view_records) {
+                if (!$view_records) {
+                    return $query->where('user_id', '=', Auth::user()->id);
+                }
+            })
+            ->where(function ($query) use ($warehouse_id, $array_warehouses_id) {
+                if ($warehouse_id !== 0) {
+                    return $query->where('warehouse_id', $warehouse_id);
+                } else {
+                    return $query->whereIn('warehouse_id', $array_warehouses_id);
+                }
+            })
+            ->get(DB::raw('SUM(GrandTotal)  As sum'))
+            ->first()->sum;
+
+        $data['return_sales'] = number_format($data['return_sales'], 2, '.', ',');
+
+        //------------------- purchases
+
+        $data['today_purchases'] = Purchase::where('deleted_at', '=', null)
+            ->whereBetween('date', array($request->from, $request->to))
+            ->where(function ($query) use ($view_records) {
+                if (!$view_records) {
+                    return $query->where('user_id', '=', Auth::user()->id);
+                }
+            })
+            ->where(function ($query) use ($warehouse_id, $array_warehouses_id) {
+                if ($warehouse_id !== 0) {
+                    return $query->where('warehouse_id', $warehouse_id);
+                } else {
+                    return $query->whereIn('warehouse_id', $array_warehouses_id);
+                }
+            })
+            ->get(DB::raw('SUM(GrandTotal)  As sum'))
+            ->first()->sum;
+
+        $data['today_purchases'] = number_format($data['today_purchases'], 2, '.', ',');
+
+        //------------------------- return_purchases
+
+        $data['return_purchases'] = PurchaseReturn::where('deleted_at', '=', null)
+            ->whereBetween('date', array($request->from, $request->to))
+            ->where(function ($query) use ($view_records) {
+                if (!$view_records) {
+                    return $query->where('user_id', '=', Auth::user()->id);
+                }
+            })
+            ->where(function ($query) use ($warehouse_id, $array_warehouses_id) {
+                if ($warehouse_id !== 0) {
+                    return $query->where('warehouse_id', $warehouse_id);
+                } else {
+                    return $query->whereIn('warehouse_id', $array_warehouses_id);
+                }
+            })
+            ->get(DB::raw('SUM(GrandTotal)  As sum'))
+            ->first()->sum;
+
+        $data['return_purchases'] = number_format($data['return_purchases'], 2, '.', ',');
+
+        $last_sales = [];
+
+        //last sales
+        $Sales = Sale::with('details', 'client', 'facture', 'warehouse')->where('deleted_at', '=', null)
+            ->where(function ($query) use ($view_records) {
+                if (!$view_records) {
+                    return $query->where('user_id', '=', Auth::user()->id);
+                }
+            })
+            ->where(function ($query) use ($warehouse_id, $array_warehouses_id) {
+                if ($warehouse_id !== 0) {
+                    return $query->where('warehouse_id', $warehouse_id);
+                } else {
                     return $query->whereIn('warehouse_id', $array_warehouses_id);
                 }
             })
@@ -460,7 +461,6 @@ class DashboardController extends Controller
             'report' => $data,
             'last_sales' => $last_sales,
         ]);
-
     }
 
     //----------------- Payment Chart js -----------------------\\
@@ -491,11 +491,10 @@ class DashboardController extends Controller
                     return $query->whereHas('sale', function ($q) use ($array_warehouses_id, $warehouse_id) {
                         $q->where('warehouse_id', $warehouse_id);
                     });
-                }else{
+                } else {
                     return $query->whereHas('sale', function ($q) use ($array_warehouses_id, $warehouse_id) {
                         $q->whereIn('warehouse_id', $array_warehouses_id);
                     });
-
                 }
             })
             ->groupBy(DB::raw("DATE_FORMAT(date,'%Y-%m-%d')"))
@@ -517,11 +516,10 @@ class DashboardController extends Controller
                     return $query->whereHas('SaleReturn', function ($q) use ($array_warehouses_id, $warehouse_id) {
                         $q->where('warehouse_id', $warehouse_id);
                     });
-                }else{
+                } else {
                     return $query->whereHas('SaleReturn', function ($q) use ($array_warehouses_id, $warehouse_id) {
                         $q->whereIn('warehouse_id', $array_warehouses_id);
                     });
-
                 }
             })
             ->groupBy(DB::raw("DATE_FORMAT(date,'%Y-%m-%d')"))
@@ -543,11 +541,10 @@ class DashboardController extends Controller
                     return $query->whereHas('purchase', function ($q) use ($array_warehouses_id, $warehouse_id) {
                         $q->where('warehouse_id', $warehouse_id);
                     });
-                }else{
+                } else {
                     return $query->whereHas('purchase', function ($q) use ($array_warehouses_id, $warehouse_id) {
                         $q->whereIn('warehouse_id', $array_warehouses_id);
                     });
-
                 }
             })
             ->groupBy(DB::raw("DATE_FORMAT(date,'%Y-%m-%d')"))
@@ -569,11 +566,10 @@ class DashboardController extends Controller
                     return $query->whereHas('PurchaseReturn', function ($q) use ($array_warehouses_id, $warehouse_id) {
                         $q->where('warehouse_id', $warehouse_id);
                     });
-                }else{
+                } else {
                     return $query->whereHas('PurchaseReturn', function ($q) use ($array_warehouses_id, $warehouse_id) {
                         $q->whereIn('warehouse_id', $array_warehouses_id);
                     });
-
                 }
             })
             ->groupBy(DB::raw("DATE_FORMAT(date,'%Y-%m-%d')"))
@@ -593,7 +589,7 @@ class DashboardController extends Controller
             ->where(function ($query) use ($warehouse_id, $array_warehouses_id) {
                 if ($warehouse_id !== 0) {
                     return $query->where('warehouse_id', $warehouse_id);
-                }else{
+                } else {
                     return $query->whereIn('warehouse_id', $array_warehouses_id);
                 }
             })
@@ -628,7 +624,6 @@ class DashboardController extends Controller
             'payment_received' => $data_recieved,
             'days' => $days,
         ]);
-
     }
 
     //----------------- array merge -----------------------\\
@@ -651,5 +646,4 @@ class DashboardController extends Controller
         }
         return $merged;
     }
-
 }

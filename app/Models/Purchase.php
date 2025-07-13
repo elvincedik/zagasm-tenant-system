@@ -9,9 +9,24 @@ class Purchase extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'date', 'Ref', 'provider_id', 'warehouse_id', 'GrandTotal','time',
-        'discount', 'shipping', 'statut', 'notes', 'TaxNet', 'tax_rate', 'paid_amount',
-        'payment_statut', 'created_at', 'updated_at', 'deleted_at',
+        'date',
+        'Ref',
+        'provider_id',
+        'warehouse_id',
+        'GrandTotal',
+        'time',
+        'discount',
+        'shipping',
+        'statut',
+        'notes',
+        'TaxNet',
+        'tax_rate',
+        'paid_amount',
+        'payment_statut',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'organization_id',
     ];
 
     protected $casts = [
@@ -51,4 +66,12 @@ class Purchase extends Model
         return $this->belongsTo('App\Models\User');
     }
 
+    protected static function booted()
+    {
+        static::addGlobalScope('organization', function ($builder) {
+            if (auth()->check()) {
+                $builder->where('organization_id', auth()->user()->organization_id);
+            }
+        });
+    }
 }
