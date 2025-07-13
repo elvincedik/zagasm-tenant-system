@@ -26,7 +26,7 @@ class CategorieController extends BaseController
 
         $categories = Category::where('deleted_at', '=', null)
 
-        // Search With Multiple Param
+            // Search With Multiple Param
             ->where(function ($query) use ($request) {
                 return $query->when($request->filled('search'), function ($query) use ($request) {
                     return $query->where('name', 'LIKE', "%{$request->search}%")
@@ -34,7 +34,7 @@ class CategorieController extends BaseController
                 });
             });
         $totalRows = $categories->count();
-        if($perPage == "-1"){
+        if ($perPage == "-1") {
             $perPage = $totalRows;
         }
         $categories = $categories->offset($offSet)
@@ -62,15 +62,17 @@ class CategorieController extends BaseController
         Category::create([
             'code' => $request['code'],
             'name' => $request['name'],
+            'organization_id' => auth()->user()->organization_id,
         ]);
         return response()->json(['success' => true]);
     }
 
-     //------------ function show -----------\\
+    //------------ function show -----------\\
 
-    public function show($id){
+    public function show($id)
+    {
         //
-    
+
     }
 
     //-------------- Update Category ---------------\\
@@ -89,7 +91,6 @@ class CategorieController extends BaseController
             'name' => $request['name'],
         ]);
         return response()->json(['success' => true]);
-
     }
 
     //-------------- Remove Category ---------------\\
@@ -119,5 +120,4 @@ class CategorieController extends BaseController
 
         return response()->json(['success' => true]);
     }
-
 }

@@ -9,8 +9,23 @@ class Quotation extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'date', 'Ref', 'client_id', 'GrandTotal', 'warehouse_id', 'user_id', 'statut','time',
-        'notes', 'discount', 'shipping', 'TaxNet', 'tax_rate', 'created_at', 'updated_at', 'deleted_at',
+        'date',
+        'Ref',
+        'client_id',
+        'GrandTotal',
+        'warehouse_id',
+        'user_id',
+        'statut',
+        'time',
+        'notes',
+        'discount',
+        'shipping',
+        'TaxNet',
+        'tax_rate',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'organization_id',
     ];
 
     protected $casts = [
@@ -45,4 +60,12 @@ class Quotation extends Model
         return $this->belongsTo('App\Models\Warehouse');
     }
 
+    protected static function booted()
+    {
+        static::addGlobalScope('organization', function ($builder) {
+            if (auth()->check()) {
+                $builder->where('organization_id', auth()->user()->organization_id);
+            }
+        });
+    }
 }

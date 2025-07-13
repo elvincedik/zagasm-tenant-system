@@ -160,6 +160,7 @@ class QuotationsController extends BaseController
 
             $order = new Quotation;
 
+            $order->organization_id = auth()->user()->organization_id;
             $order->date = $request->date;
             $order->time = now()->toTimeString();
             $order->Ref = $this->getNumberOrder();
@@ -1018,4 +1019,3 @@ class QuotationsController extends BaseController
     
 
 }
-
