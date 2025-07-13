@@ -143,6 +143,7 @@ class ExpensesController extends BaseController
             ]);
 
             Expense::create([
+                'organization_id' => auth()->user()->organization_id,
                 'user_id' => Auth::user()->id,
                 'date' => $request['expense']['date'],
                 'Ref' => $this->getNumberOrder(),
