@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Mail\Password_Reset_Request;
@@ -25,17 +26,22 @@ class PasswordResetController extends BaseController
         ]);
         $user = User::where('email', $request->email)->first();
         if (!$user || !$user->statut) {
-            return response()->json(['status' => false,
+            return response()->json([
+                'status' => false,
                 'message' => 'We can\'t find a user with that e-mail address.',
             ]);
         }
 
 
         $passwordReset = PasswordReset::updateOrCreate(
-            ['email' => $user->email],
+            [
+                'email' => $user->email,
+                'organization_id' => $user->organization_id,
+            ],
             [
                 'email' => $user->email,
                 'token' => Str::random(60),
+                'organization_id' => $user->organization_id,
             ]
         );
         if ($user && $passwordReset) {
@@ -45,7 +51,8 @@ class PasswordResetController extends BaseController
         $url = url('/password/find/' . $passwordReset->token);
         Mail::to($user->email)->send(new Password_Reset_Request($passwordReset->token, $url));
 
-        return response()->json(['status' => true,
+        return response()->json([
+            'status' => true,
             'message' => 'We have e-mailed your password reset link!',
         ], 200);
     }
@@ -100,6 +107,7 @@ class PasswordResetController extends BaseController
         $passwordReset = PasswordReset::where([
             ['token', $request->token],
             ['email', $request->email],
+            ['organization_id', $user->organization_id],
         ])->first();
         if (!$passwordReset) {
             return response()->json([
