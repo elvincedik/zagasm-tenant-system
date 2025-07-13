@@ -59,6 +59,7 @@ class PaymentMethodController extends BaseController
 
         PaymentMethod::create([
             'name' => $request['name'],
+            'organization_id' => auth()->user()->organization_id,
         ]);
         return response()->json(['success' => true]);
     }
