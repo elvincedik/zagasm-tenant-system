@@ -151,6 +151,7 @@ class PaymentSaleReturnsController extends BaseController
                 }
 
                 PaymentSaleReturns::create([
+                    'organization_id' => auth()->user()->organization_id,
                     'sale_return_id' => $request['sale_return_id'],
                     'account_id'     => $request['account_id']?$request['account_id']:NULL,
                     'Ref' => $this->getNumberOrder(),
