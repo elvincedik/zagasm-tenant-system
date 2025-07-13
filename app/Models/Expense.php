@@ -9,8 +9,19 @@ class Expense extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'date', 'user_id', 'expense_category_id', 'warehouse_id', 'details','account_id','payment_method_id',
-        'amount', 'Ref', 'created_at', 'updated_at', 'deleted_at',
+        'date',
+        'user_id',
+        'expense_category_id',
+        'warehouse_id',
+        'details',
+        'account_id',
+        'payment_method_id',
+        'amount',
+        'Ref',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'organization_id',
     ];
 
     protected $casts = [
@@ -47,4 +58,12 @@ class Expense extends Model
         return $this->belongsTo('App\Models\User');
     }
 
+    protected static function booted()
+    {
+        static::addGlobalScope('organization', function ($builder) {
+            if (auth()->check()) {
+                $builder->where('organization_id', auth()->user()->organization_id);
+            }
+        });
+    }
 }

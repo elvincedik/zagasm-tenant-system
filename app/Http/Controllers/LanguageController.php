@@ -55,6 +55,7 @@ class LanguageController extends Controller
 
 
         return Language::create([
+            
             'name' => $request->name,
             'locale' => $request->locale,
             'flag' => $filename,
