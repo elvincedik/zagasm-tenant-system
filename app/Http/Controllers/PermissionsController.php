@@ -76,7 +76,10 @@ class PermissionsController extends BaseController
                 $permissions = $request->permissions;
 
                 foreach ($permissions as $permission_slug) {
-                    $perm = Permission::firstOrCreate(['name' => $permission_slug]);
+                    $perm = Permission::firstOrCreate([
+                        'name' => $permission_slug,
+                        'organization_id' => auth()->user()->organization_id,
+                    ]);
                     $data[] = $perm->id;
                 }
 

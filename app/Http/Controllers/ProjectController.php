@@ -172,6 +172,7 @@ class ProjectController extends Controller
         ]);
 
         $project  = Project::create([
+            
             'title'            => $request['title'],
             'start_date'       => $request['start_date'],
             'end_date'         => $request['end_date'],
