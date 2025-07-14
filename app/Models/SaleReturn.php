@@ -9,10 +9,26 @@ class SaleReturn extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'date', 'Ref', 'GrandTotal','time',
-        'user_id', 'discount', 'shipping',
-        'warehouse_id', 'client_id','sale_id', 'notes', 'TaxNet', 'tax_rate', 'statut',
-        'paid_amount', 'payment_statut', 'created_at', 'updated_at', 'deleted_at',
+        'date',
+        'Ref',
+        'GrandTotal',
+        'time',
+        'user_id',
+        'discount',
+        'shipping',
+        'warehouse_id',
+        'client_id',
+        'sale_id',
+        'notes',
+        'TaxNet',
+        'tax_rate',
+        'statut',
+        'paid_amount',
+        'payment_statut',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'organization_id',
     ];
 
     protected $casts = [
@@ -63,4 +79,17 @@ class SaleReturn extends Model
         return $this->hasMany('App\Models\PaymentSaleReturns');
     }
 
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('organization', function ($builder) {
+            if (auth()->check()) {
+                $builder->where('organization_id', auth()->user()->organization_id);
+            }
+        });
+    }
 }

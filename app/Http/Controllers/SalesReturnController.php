@@ -181,6 +181,7 @@ class SalesReturnController extends BaseController
         \DB::transaction(function () use ($request) {
             $order = new SaleReturn;
 
+            $order->organization_id = auth()->user()->organization_id;
             $order->date = $request->date;
             $order->time = now()->toTimeString();
             $order->Ref = $this->getNumberOrder();
