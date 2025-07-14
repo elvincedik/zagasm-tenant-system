@@ -201,6 +201,7 @@ class SalesController extends BaseController
             $helpers = new helpers();
             $order = new Sale;
 
+            $order->organization_id = auth()->user()->organization_id;
             $order->is_pos = 0;
             $order->date = $request->date;
             $order->time = now()->toTimeString();
