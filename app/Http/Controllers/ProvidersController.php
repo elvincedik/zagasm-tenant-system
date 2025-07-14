@@ -123,6 +123,7 @@ class ProvidersController extends BaseController
             'name' => 'required',
         ]);
         Provider::create([
+            'organization_id' => auth()->user()->organization_id,
             'name' => $request['name'],
             'code' => $this->getNumberOrder(),
             'adresse' => $request['adresse'],
