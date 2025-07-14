@@ -265,6 +265,7 @@ class PaymentSalesController extends BaseController
                     } else {
 
                         PaymentSale::create([
+                            
                             'sale_id'   => $sale->id,
                             'Ref'       => app('App\Http\Controllers\PaymentSalesController')->getNumberOrder(),
                             'date'      => Carbon::now(),
@@ -274,6 +275,7 @@ class PaymentSalesController extends BaseController
                             'change'    => $request['change'],
                             'notes'     => $request['notes'],
                             'user_id'   => Auth::user()->id,
+                            'organization_id' => auth()->user()->organization_id,
                         ]);
 
                         $account = Account::where('id', $request['account_id'])->exists();
