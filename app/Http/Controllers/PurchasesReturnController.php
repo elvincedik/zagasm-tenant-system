@@ -174,6 +174,7 @@ class PurchasesReturnController extends BaseController
         \DB::transaction(function () use ($request) {
             $order = new PurchaseReturn;
 
+            $order->organization_id = auth()->user()->organization_id;
             $order->date = $request->date;
             $order->time = now()->toTimeString();
             $order->Ref = $this->getNumberOrder();
