@@ -102,6 +102,7 @@ class ShipmentController extends BaseController
         \DB::transaction(function () use ($request) {
             $shipment = Shipment::firstOrNew([ 'Ref' => $request['Ref']]);
 
+            $shipment->organization_id = auth()->user()->organization_id;
             $shipment->user_id = Auth::user()->id;
             $shipment->sale_id = $request['sale_id'];
             $shipment->delivered_to = $request['delivered_to'];

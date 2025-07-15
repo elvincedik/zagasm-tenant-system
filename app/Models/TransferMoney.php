@@ -10,7 +10,14 @@ class TransferMoney extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'date','from_account_id', 'to_account_id','amount','created_at', 'updated_at', 'deleted_at',
+        'date',
+        'from_account_id',
+        'to_account_id',
+        'amount',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'organization_id',
     ];
 
     protected $casts = [
@@ -31,4 +38,17 @@ class TransferMoney extends Model
         return $this->belongsTo('App\Models\Account', 'to_account_id');
     }
 
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('organization', function ($builder) {
+            if (auth()->check()) {
+                $builder->where('organization_id', auth()->user()->organization_id);
+            }
+        });
+    }
 }

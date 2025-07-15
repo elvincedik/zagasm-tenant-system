@@ -10,9 +10,24 @@ class Transfer extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'date','user_id', 'from_warehouse_id', 'to_warehouse_id','time',
-        'items', 'statut', 'notes', 'GrandTotal', 'discount', 'shipping', 'TaxNet', 'tax_rate',
-        'created_at', 'updated_at', 'deleted_at',
+        'id',
+        'date',
+        'user_id',
+        'from_warehouse_id',
+        'to_warehouse_id',
+        'time',
+        'items',
+        'statut',
+        'notes',
+        'GrandTotal',
+        'discount',
+        'shipping',
+        'TaxNet',
+        'tax_rate',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'organization_id',
     ];
 
     protected $casts = [
@@ -48,4 +63,17 @@ class Transfer extends Model
         return $this->belongsTo('App\Models\Warehouse', 'to_warehouse_id');
     }
 
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('organization', function ($builder) {
+            if (auth()->check()) {
+                $builder->where('organization_id', auth()->user()->organization_id);
+            }
+        });
+    }
 }

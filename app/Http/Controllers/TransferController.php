@@ -125,6 +125,7 @@ class TransferController extends BaseController
         \DB::transaction(function () use ($request) {
             $order = new Transfer;
 
+            $order->organization_id = auth()->user()->organization_id;
             $order->date = $request->transfer['date'];
             $order->Ref = $this->getNumberOrder();
             $order->from_warehouse_id = $request->transfer['from_warehouse'];

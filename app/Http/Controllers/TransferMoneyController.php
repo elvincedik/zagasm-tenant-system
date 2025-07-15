@@ -120,6 +120,7 @@ class TransferMoneyController extends BaseController
             ]);
 
             TransferMoney::create([
+                'organization_id' => auth()->user()->organization_id,
                 'from_account_id' => $request['from_account_id'],
                 'to_account_id'   => $request['to_account_id'],
                 'amount'          => $request['amount'],
