@@ -29,8 +29,10 @@ use App\Http\Controllers\HomepageController;
 // Passport::routes();
 
 
-// Route::get('/homepage', [HomepageController::class, 'show']);
-Route::get('/', [HomepageController::class, 'index'])->name('home');
+Route::get('/', function () {
+    return redirect('/');
+});
+Route::get('/', [HomepageController::class, 'index']);
 Route::post('/login', [
     'uses' => 'Auth\LoginController@login',
     'middleware' => 'Is_Active',

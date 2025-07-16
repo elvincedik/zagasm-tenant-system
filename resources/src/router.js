@@ -6,9 +6,6 @@ Vue.use(Router);
 
 
 
-
-
-
 // create new router
 
 const baseRoutes = [
@@ -24,7 +21,7 @@ const baseRoutes = [
     {
         path: "/",
         component: () => import("./views/app"),
-        redirect: "/app/dashboard",
+        // redirect: "/app/dashboard",
         name: 'app',
 
         children: [
