@@ -87,6 +87,7 @@ class Subscription extends Model
 
             // Create Sale Detail
             SaleDetail::create([
+                'organization_id' => auth()->user()->organization_id,
                 'sale_id' => $sale->id,
                 'date' => now(),
                 'sale_unit_id' => $unit,

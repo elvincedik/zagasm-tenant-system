@@ -88,6 +88,7 @@ class HolidayController extends Controller
         ]);
 
         Holiday::create([
+            'organization_id' => auth()->user()->organization_id,
             'company_id'      => $request['company_id'],
             'title'           => $request['title'],
             'start_date'      => $request['start_date'],

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\hrm;
+
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
@@ -32,17 +33,21 @@ class EmployeeAccountController extends Controller
             'account_no'     => 'required|string|max:255',
         ]);
 
-        EmployeeAccount::create($request->all());
+        $data = $request->all();
+        $data['organization_id'] = auth()->user()->organization_id; // ✅ Multi-tenant scoping
+
+        EmployeeAccount::create($data);
 
         return response()->json(['success' => true]);
     }
 
     //------------ function show -----------\\
 
-    public function show($id){
+    public function show($id)
+    {
         //
-        
-        }
+
+    }
 
     //-----------Update EmployeeAccount --------------\\
 
@@ -75,7 +80,4 @@ class EmployeeAccountController extends Controller
 
         return response()->json(['success' => true]);
     }
-
-
-
 }

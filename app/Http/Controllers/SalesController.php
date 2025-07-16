@@ -395,6 +395,7 @@ class SalesController extends BaseController
                             $PaymentCard['customer_id'] = $request->client_id;
                             $PaymentCard['payment_id']  = $PaymentSale->id;
                             $PaymentCard['charge_id']   = $charge->id;
+                            $PaymentCard['organization_id'] = auth()->user()->organization_id;
                             PaymentWithCreditCard::create($PaymentCard);
     
                             // Paying Method Cash
@@ -595,6 +596,7 @@ class SalesController extends BaseController
                         $orderDetails['product_variant_id'] = $prod_detail['product_variant_id'];
                         $orderDetails['total']              = $prod_detail['subtotal'];
                         $orderDetails['imei_number']        = $prod_detail['imei_number'];
+                        $orderDetails['organization_id'] = auth()->user()->organization_id;
 
                         if (!in_array($prod_detail['id'], $old_products_id)) {
                             $orderDetails['date'] = $request['date'];

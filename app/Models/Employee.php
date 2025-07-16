@@ -12,10 +12,40 @@ class Employee extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'id','firstname','lastname','username','email','gender','phone','remaining_leave','total_leave',
-        'birth_date','department_id','designation_id','office_shift_id','joining_date',
-        'leaving_date','marital_status','employment_type','city','province','zipcode','address','resume','avatar','document',
-        'country','company_id','facebook','skype','whatsapp','twitter','linkedin','hourly_rate','basic_salary'
+        'id',
+        'firstname',
+        'lastname',
+        'username',
+        'email',
+        'gender',
+        'phone',
+        'remaining_leave',
+        'total_leave',
+        'birth_date',
+        'department_id',
+        'designation_id',
+        'office_shift_id',
+        'joining_date',
+        'leaving_date',
+        'marital_status',
+        'employment_type',
+        'city',
+        'province',
+        'zipcode',
+        'address',
+        'resume',
+        'avatar',
+        'document',
+        'country',
+        'company_id',
+        'facebook',
+        'skype',
+        'whatsapp',
+        'twitter',
+        'linkedin',
+        'hourly_rate',
+        'basic_salary',
+        'organization_id',
     ];
 
     protected $casts = [
@@ -51,7 +81,7 @@ class Employee extends Model
         return $this->hasOne('App\Models\OfficeShift', 'id', 'office_shift_id');
     }
 
-    
+
     public function attendance()
     {
         return $this->hasMany(Attendance::class);
@@ -60,8 +90,21 @@ class Employee extends Model
     public function leave()
     {
         return $this->hasMany(Leave::class)
-        ->select('id','employee_id','start_date','end_date','status')
-        ->where('status' , 'approved');
+            ->select('id', 'employee_id', 'start_date', 'end_date', 'status')
+            ->where('status', 'approved');
     }
 
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('organization', function ($builder) {
+            if (auth()->check()) {
+                $builder->where('organization_id', auth()->user()->organization_id);
+            }
+        });
+    }
 }

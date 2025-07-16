@@ -8,8 +8,19 @@ class QuotationDetail extends Model
 {
 
     protected $fillable = [
-        'id', 'product_id', 'quotation_id','sale_unit_id', 'total', 'quantity', 'product_variant_id',
-        'price', 'TaxNet', 'discount', 'discount_method', 'tax_method',
+        'id',
+        'product_id',
+        'quotation_id',
+        'sale_unit_id',
+        'total',
+        'quantity',
+        'product_variant_id',
+        'price',
+        'TaxNet',
+        'discount',
+        'discount_method',
+        'tax_method',
+        'organization_id',
     ];
 
     protected $casts = [
@@ -34,4 +45,17 @@ class QuotationDetail extends Model
         return $this->belongsTo('App\Models\Product');
     }
 
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('organization', function ($builder) {
+            if (auth()->check()) {
+                $builder->where('organization_id', auth()->user()->organization_id);
+            }
+        });
+    }
 }

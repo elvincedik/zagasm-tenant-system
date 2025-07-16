@@ -61,6 +61,7 @@ class CategoryDepositController extends BaseController
 
         DepositCategory::create([
             'title' => $request['title'],
+            'organization_id' => auth()->user()->organization_id,
         ]);
 
         return response()->json(['success' => true], 200);

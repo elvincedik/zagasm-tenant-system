@@ -111,6 +111,7 @@ class PayrollController extends Controller
         \DB::transaction(function () use ($request) {
 
             Payroll::create([
+                'organization_id' => auth()->user()->organization_id,
                 'user_id'         => Auth::user()->id,
                 'Ref'             => $this->getNumberOrder(),
                 'date'            => $request['date'],

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\hrm;
+
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
@@ -29,30 +30,35 @@ class LeaveController extends Controller
         $order = $request->SortField;
         $dir = $request->SortType;
 
-        $leaves = Leave::
-        join('companies','companies.id','=','leaves.company_id')
-        ->join('departments','departments.id','=','leaves.department_id')
-        ->join('employees','employees.id','=','leaves.employee_id')
-        ->join('leave_types','leave_types.id','=','leaves.leave_type_id')
-        ->where('leaves.deleted_at' , '=', null)
-        ->select('leaves.*',
-        'employees.username AS employee_name', 'employees.id AS employee_id',
-        'leave_types.title AS leave_type_title', 'leave_types.id AS leave_type_id',
-        'companies.name AS company_name', 'companies.id AS company_id',
-        'departments.department AS department_name', 'departments.id AS department_id')
+        $leaves = Leave::join('companies', 'companies.id', '=', 'leaves.company_id')
+            ->join('departments', 'departments.id', '=', 'leaves.department_id')
+            ->join('employees', 'employees.id', '=', 'leaves.employee_id')
+            ->join('leave_types', 'leave_types.id', '=', 'leaves.leave_type_id')
+            ->where('leaves.deleted_at', '=', null)
+            ->select(
+                'leaves.*',
+                'employees.username AS employee_name',
+                'employees.id AS employee_id',
+                'leave_types.title AS leave_type_title',
+                'leave_types.id AS leave_type_id',
+                'companies.name AS company_name',
+                'companies.id AS company_id',
+                'departments.department AS department_name',
+                'departments.id AS department_id'
+            )
 
-       // Search With Multiple Param
+            // Search With Multiple Param
             ->where(function ($query) use ($request) {
                 return $query->when($request->filled('search'), function ($query) use ($request) {
                     return $query->where('employees.username', 'LIKE', "%{$request->search}%")
-                            ->orWhere('leave_types.title', 'LIKE', "%{$request->search}%")
-                            ->orWhere('companies.name', 'LIKE', "%{$request->search}%")
-                            ->orWhere('departments.department', 'LIKE', "%{$request->search}%");
+                        ->orWhere('leave_types.title', 'LIKE', "%{$request->search}%")
+                        ->orWhere('companies.name', 'LIKE', "%{$request->search}%")
+                        ->orWhere('departments.department', 'LIKE', "%{$request->search}%");
                 });
             });
 
         $totalRows = $leaves->count();
-        if($perPage == "-1"){
+        if ($perPage == "-1") {
             $perPage = $totalRows;
         }
         $leaves = $leaves->offset($offSet)
@@ -72,13 +78,12 @@ class LeaveController extends Controller
         $this->authorizeForUser($request->user('api'), 'create', Leave::class);
 
         $leave_types = LeaveType::where('deleted_at', '=', null)->orderBy('id', 'desc')->get();
-        $companies = Company::where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id','name']);
+        $companies = Company::where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id', 'name']);
 
         return response()->json([
             'companies'   => $companies,
             'leave_types' => $leave_types,
         ]);
-
     }
 
 
@@ -103,9 +108,8 @@ class LeaveController extends Controller
 
 
             $image = $request->file('attachment');
-            $filename = time().'.'.$image->extension();  
+            $filename = time() . '.' . $image->extension();
             $image->move(public_path('/images/leaves'), $filename);
-
         } else {
             $filename = 'no_image.png';
         }
@@ -113,10 +117,10 @@ class LeaveController extends Controller
         $start_date = new DateTime($request->start_date);
         $end_date = new DateTime($request->end_date);
         $day     = $start_date->diff($end_date);
-        $days_diff    = $day->d +1;
+        $days_diff    = $day->d + 1;
         $leave_type = LeaveType::findOrFail($request['leave_type_id']);
 
-        $leave_data= [];
+        $leave_data = [];
         $leave_data['employee_id'] = $request['employee_id'];
         $leave_data['company_id'] = $request['company_id'];
         $leave_data['department_id'] = $request['department_id'];
@@ -128,27 +132,28 @@ class LeaveController extends Controller
         $leave_data['attachment'] = $filename;
         $leave_data['half_day'] = $request['half_day'];
         $leave_data['status'] = $request['status'];
+        $leave_data['organization_id'] = auth()->user()->organization_id;
+
 
         $employee_leave_info = Employee::find($request->employee_id);
-        if($days_diff > $employee_leave_info->remaining_leave)
-        {
+        if ($days_diff > $employee_leave_info->remaining_leave) {
             return response()->json(['remaining_leave' => "remaining leaves are insufficient", 'isvalid' => false]);
-        }
-        elseif($request->status == 'approved'){
+        } elseif ($request->status == 'approved') {
             $employee_leave_info->remaining_leave = $employee_leave_info->remaining_leave - $days_diff;
             $employee_leave_info->update();
         }
 
         Leave::create($leave_data);
 
-        return response()->json(['success' => true ,'isvalid' => true]);
+        return response()->json(['success' => true, 'isvalid' => true]);
     }
 
     //------------ function show -----------\\
 
-    public function show($id){
+    public function show($id)
+    {
         //
-        
+
     }
 
 
@@ -158,14 +163,13 @@ class LeaveController extends Controller
 
         $leave = Leave::where('deleted_at', '=', null)->findOrFail($id);
         $leave_types = LeaveType::where('deleted_at', '=', null)->orderBy('id', 'desc')->get();
-        $companies = Company::where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id','name']);
+        $companies = Company::where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id', 'name']);
 
         return response()->json([
             'leave'       => $leave,
             'companies'   => $companies,
             'leave_types' => $leave_types,
         ]);
-
     }
 
 
@@ -192,7 +196,7 @@ class LeaveController extends Controller
             if ($request->attachment != $CurrentAttachement) {
 
                 $image = $request->file('attachment');
-                $filename = time().'.'.$image->extension();  
+                $filename = time() . '.' . $image->extension();
                 $image->move(public_path('/images/leaves'), $filename);
                 $path = public_path() . '/images/leaves';
                 $LeavePhoto = $path . '/' . $CurrentAttachement;
@@ -204,17 +208,17 @@ class LeaveController extends Controller
             } else {
                 $filename = $CurrentAttachement;
             }
-        }else{
+        } else {
             $filename = $CurrentAttachement;
         }
 
         $start_date = new DateTime($request->start_date);
         $end_date = new DateTime($request->end_date);
         $day     = $start_date->diff($end_date);
-        $days_diff    = $day->d +1;
+        $days_diff    = $day->d + 1;
         $leave_type = LeaveType::findOrFail($request['leave_type_id']);
 
-        $leave_data= [];
+        $leave_data = [];
         $leave_data['employee_id'] = $request['employee_id'];
         $leave_data['company_id'] = $request['company_id'];
         $leave_data['department_id'] = $request['department_id'];
@@ -229,38 +233,35 @@ class LeaveController extends Controller
 
 
         // return the old remaining_leave
-        if($leave->status == 'approved'){
-           
+        if ($leave->status == 'approved') {
+
             $employee_leave_info = Employee::find($request->employee_id);
-            if($days_diff > ($employee_leave_info->remaining_leave + $leave->days))
-            {
+            if ($days_diff > ($employee_leave_info->remaining_leave + $leave->days)) {
                 return response()->json(['remaining_leave' => "remaining leaves are insufficient", 'isvalid' => false]);
-            }else{
+            } else {
                 $employee_leave_info->remaining_leave = $employee_leave_info->remaining_leave + $leave->days;
                 $employee_leave_info->update();
             }
-
         }
 
 
-        if($leave->status != 'approved'){
+        if ($leave->status != 'approved') {
             $employee_leave_info = Employee::find($request->employee_id);
-            if($days_diff > $employee_leave_info->remaining_leave)
-            {
+            if ($days_diff > $employee_leave_info->remaining_leave) {
                 return response()->json(['remaining_leave' => "remaining leaves are insufficient", 'isvalid' => false]);
             }
         }
-        
-        if($request->status == 'approved'){
+
+        if ($request->status == 'approved') {
             $employee_leave_info = Employee::find($request->employee_id);
             $employee_leave_info->remaining_leave = $employee_leave_info->remaining_leave - $days_diff;
             $employee_leave_info->update();
         }
 
-    
+
         Leave::find($id)->update($leave_data);
 
-        return response()->json(['success' => true ,'isvalid' => true]);
+        return response()->json(['success' => true, 'isvalid' => true]);
     }
 
 
@@ -285,7 +286,7 @@ class LeaveController extends Controller
                 @unlink($LeavePhoto);
             }
         }
-      
+
         return response()->json(['success' => true]);
     }
 
@@ -316,6 +317,4 @@ class LeaveController extends Controller
 
         return response()->json(['success' => true]);
     }
-
-
 }

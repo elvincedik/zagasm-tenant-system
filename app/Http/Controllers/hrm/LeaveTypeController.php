@@ -60,6 +60,7 @@ class LeaveTypeController extends Controller
 
         LeaveType::create([
             'title'           => $request['title'],
+            'organization_id' => auth()->user()->organization_id,
         ]);
 
         return response()->json(['success' => true]);

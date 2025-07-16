@@ -12,8 +12,18 @@ class Payroll extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'user_id','date','employee_id','account_id','amount','payment_method_id','payment_status','Ref',
-        'created_at', 'updated_at', 'deleted_at'
+        'user_id',
+        'date',
+        'employee_id',
+        'account_id',
+        'amount',
+        'payment_method_id',
+        'payment_status',
+        'Ref',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'organization_id',
     ];
 
     protected $casts = [
@@ -42,5 +52,19 @@ class Payroll extends Model
     public function employee()
     {
         return $this->belongsTo('App\Models\Employee');
+    }
+
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('organization', function ($builder) {
+            if (auth()->check()) {
+                $builder->where('organization_id', auth()->user()->organization_id);
+            }
+        });
     }
 }

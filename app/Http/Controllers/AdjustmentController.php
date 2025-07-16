@@ -178,6 +178,7 @@ class AdjustmentController extends BaseController
             $i = 0;
             foreach ($data as $key => $value) {
                 $orderDetails[] = [
+                    'organization_id' => auth()->user()->organization_id,
                     'adjustment_id' => $order->id,
                     'quantity' => $value['quantity'],
                     'product_id' => $value['product_id'],

@@ -150,6 +150,7 @@ class EmployeesController extends Controller
             $data['designation_id'] = $request['designation_id'];
             $data['office_shift_id'] = $request['office_shift_id'];
             $data['joining_date'] = $request['joining_date'];
+            $data['organization_id'] = auth()->user()->organization_id;
             
             Employee::create($data);
             

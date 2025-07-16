@@ -259,6 +259,7 @@ class PaymentSalesController extends BaseController
                         $PaymentCard['customer_id'] = $sale->client_id;
                         $PaymentCard['payment_id']  = $PaymentSale->id;
                         $PaymentCard['charge_id']   = $charge->id;
+                        $PaymentCard['organization_id'] = auth()->user()->organization_id;
                         PaymentWithCreditCard::create($PaymentCard);
 
                         // Paying Method Cash

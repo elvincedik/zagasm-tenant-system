@@ -152,6 +152,7 @@ class PaymentPurchaseReturnsController extends BaseController
                 }
 
                 PaymentPurchaseReturns::create([
+                    'organization_id' => auth()->user()->organization_id,
                     'purchase_return_id' => $request['purchase_return_id'],
                     'account_id'         => $request['account_id']?$request['account_id']:NULL,
                     'Ref' => $this->getNumberOrder(),

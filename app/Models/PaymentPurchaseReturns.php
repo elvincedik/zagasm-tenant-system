@@ -11,7 +11,16 @@ class PaymentPurchaseReturns extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'purchase_return_id', 'date', 'montant','change', 'Ref', 'payment_method_id', 'user_id', 'notes','account_id'
+        'purchase_return_id',
+        'date',
+        'montant',
+        'change',
+        'Ref',
+        'payment_method_id',
+        'user_id',
+        'notes',
+        'account_id',
+        'organization_id',
     ];
 
     protected $casts = [
@@ -44,4 +53,17 @@ class PaymentPurchaseReturns extends Model
         return $this->belongsTo('App\Models\PurchaseReturn');
     }
 
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('organization', function ($builder) {
+            if (auth()->check()) {
+                $builder->where('organization_id', auth()->user()->organization_id);
+            }
+        });
+    }
 }

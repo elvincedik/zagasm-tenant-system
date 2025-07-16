@@ -227,6 +227,7 @@ class PosController extends BaseController
                         'payment_id' => $paymentSale->id,
                         'customer_stripe_id' => $customerStripeId,
                         'charge_id' => $charge->id,
+                        'organization_id' => auth()->user()->organization_id,
                     ]);
                 }
     
@@ -587,6 +588,7 @@ class PosController extends BaseController
                 'discount' => $value['discount'],
                 'discount_method' => $value['discount_Method'],
                 'imei_number' => $value['imei_number'],
+                'organization_id' => auth()->user()->organization_id,
                 ];
             }
 
@@ -829,6 +831,7 @@ class PosController extends BaseController
                             $PaymentCard['customer_id'] = $request->client_id;
                             $PaymentCard['payment_id']  = $PaymentSale->id;
                             $PaymentCard['charge_id']   = $charge->id;
+                            $PaymentCard['organization_id'] = auth()->user()->organization_id;
                             PaymentWithCreditCard::create($PaymentCard);
 
                             // Paying Method Cash

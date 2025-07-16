@@ -22,6 +22,7 @@ class Leave extends Model
         'employee_id'  => 'integer',
         'leave_type_id'=>'integer',
         'half_day'     => 'integer',
+        'organization_id',
     ];
 
 
@@ -43,5 +44,19 @@ class Leave extends Model
     public function leave_type()
     {
         return $this->belongsTo('App\Models\LeaveType');
+    }
+
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('organization', function ($builder) {
+            if (auth()->check()) {
+                $builder->where('organization_id', auth()->user()->organization_id);
+            }
+        });
     }
 }

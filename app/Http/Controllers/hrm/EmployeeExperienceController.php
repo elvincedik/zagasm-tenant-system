@@ -32,6 +32,7 @@ class EmployeeExperienceController extends Controller
         ]);
 
         EmployeeExperience::create([
+            'organization_id' => auth()->user()->organization_id,
             'company_name'    => $request['company_name'],
             'employee_id'     => $request['employee_id'],
             'title'           => $request['title'],
