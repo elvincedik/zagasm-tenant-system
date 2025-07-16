@@ -20,12 +20,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 //--------------------------- Reset Password  ---------------------------
 
-Route::group([
-    'prefix' => 'password',
-], function () {
-    Route::post('create', 'PasswordResetController@create');
-    Route::post('reset', 'PasswordResetController@reset');
-});
+// Route::group([
+//     'prefix' => 'password',
+// ], function () {
+//     Route::post('create', 'PasswordResetController@create');
+//     Route::post('reset', 'PasswordResetController@reset');
+// });
 
 
 Route::post('getAccessToken', 'AuthController@getAccessToken');
