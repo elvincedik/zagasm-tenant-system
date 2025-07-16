@@ -86,6 +86,7 @@ Vue.component('login-component', require('./views/app/sessions/signIn.vue').defa
 Vue.component('register-component', require('./views/app/sessions/register.vue').default);
 Vue.component('forgot-component', require('./views/app/sessions/forgot.vue').default);
 Vue.component('reset-component', require('./views/app/sessions/reset.vue').default);
+// Vue.component('home-component', require('./views/app/sessions/reset.vue').default);
 
 Vue.config.productionTip = true;
 Vue.config.silent = true;

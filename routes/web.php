@@ -9,6 +9,10 @@ use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Auth\RegisterController;
 use Modules\Store\Http\Controllers\StoreController;
 use App\Http\Controllers\Auth\RegisterControllerTwo;
+use App\Http\Controllers\HomepageController;
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +29,8 @@ use App\Http\Controllers\Auth\RegisterControllerTwo;
 // Passport::routes();
 
 
-
+// Route::get('/homepage', [HomepageController::class, 'show']);
+Route::get('/', [HomepageController::class, 'index'])->name('home');
 Route::post('/login', [
     'uses' => 'Auth\LoginController@login',
     'middleware' => 'Is_Active',
