@@ -10,10 +10,12 @@
 
     <link rel="icon" href="{{ asset('images/' . ($app_settings->favicon ?? 'favicon.ico')) }}">
     <title>{{ $app_settings->app_name ?? 'Stocky | Ultimate Inventory With POS' }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
 
 </head>
 
-<body class="text-left">
+<body class="bg-light">
     <noscript>
         <strong>
             We're sorry but Stocky doesn't work properly without JavaScript
@@ -29,34 +31,23 @@
 
         <div class="loading"></div>
     </div>
-    <div class= "mb-3">
-        <p>homepage</p>
-        
+      <div class="container vh-100 d-flex flex-column justify-content-center align-items-center">
+    <div class="text-center mb-4">
+      <h1 class="display-4">Welcome to Tenant System</h1>
+      <p class="lead">Manage your rental property and tenants efficiently.</p>
     </div>
 
-    <button
-                                        type="submit"
-                                        class="btn-rounded btn-block mt-2"
-                                        variant="primary"
-                                        :disabled="loading"
-                                    >
-                                        Register
-                                    </button>
+    <div class="d-flex gap-3">
+      <a href="/register" class="btn btn-primary btn-lg">Register</a>
+      <a href="/login" class="btn btn-outline-secondary btn-lg">Login</a>
+    </div>
+  </div>
 
-    {{-- <script>
-        window.config = {
-            "ModulesEnabled": @json($ModulesEnabled),
-            "ModulesInstalled": @json($ModulesInstalled),
-        };
-    </script> --}}
-    <script>
-        window.config = {
-            "ModulesEnabled": @json($ModulesEnabled ?? []),
-            "ModulesInstalled": @json($ModulesInstalled ?? []),
-        };
-    </script>
 
     <script src="/js/login.min.js?v=5.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
 </body>
 
 </html>
