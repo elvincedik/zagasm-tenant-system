@@ -75,6 +75,7 @@ class AccountController extends BaseController
         ]);
 
         Account::create([
+            'organization_id' => auth()->user()->organization_id,
             'account_num' => $request['account_num'],
             'account_name' => $request['account_name'],
             'initial_balance' => $request['initial_balance'],

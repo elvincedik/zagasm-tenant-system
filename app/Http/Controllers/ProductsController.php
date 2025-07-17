@@ -460,6 +460,7 @@ class ProductsController extends BaseController
                             'cost'  => $variant->cost,
                             'price' => $variant->price,
                             'code'  => $variant->code,
+                            'organization_id' => auth()->user()->organization_id,
                         ];
                     }
                     ProductVariant::insert($Product_variants_data);
@@ -503,6 +504,7 @@ class ProductsController extends BaseController
                             'product_variant_id' => $variant->id,
                             'manage_stock'       => $manage_stock,
                             'qte'                => $qty,
+                            'organization_id' => auth()->user()->organization_id,
                             ];
                         }
                     } else {
@@ -511,6 +513,7 @@ class ProductsController extends BaseController
                         'warehouse_id' => $wid,
                         'manage_stock' => $manage_stock,
                         'qte'          => $qty,
+                        'organization_id' => auth()->user()->organization_id,
                         ];
                     }
                 }

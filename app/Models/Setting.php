@@ -8,9 +8,25 @@ class Setting extends Model
 {
 
     protected $fillable = [
-        'currency_id', 'email', 'CompanyName', 'CompanyPhone', 'CompanyAdress','quotation_with_stock',
-         'logo','footer','developed_by','client_id','warehouse_id','default_language','show_language',
-         'is_invoice_footer','invoice_footer','app_name','favicon','page_title_suffix'
+        'currency_id',
+        'email',
+        'CompanyName',
+        'CompanyPhone',
+        'CompanyAdress',
+        'quotation_with_stock',
+        'logo',
+        'footer',
+        'developed_by',
+        'client_id',
+        'warehouse_id',
+        'default_language',
+        'show_language',
+        'is_invoice_footer',
+        'invoice_footer',
+        'app_name',
+        'favicon',
+        'page_title_suffix',
+        'organization_id',
     ];
 
     protected $casts = [
@@ -32,4 +48,17 @@ class Setting extends Model
         return $this->belongsTo('App\Models\Client');
     }
 
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('organization', function ($builder) {
+            if (auth()->check()) {
+                $builder->where('organization_id', auth()->user()->organization_id);
+            }
+        });
+    }
 }

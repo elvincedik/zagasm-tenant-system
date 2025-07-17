@@ -9,9 +9,30 @@ class Sale extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'date', 'Ref', 'is_pos', 'client_id', 'GrandTotal', 'qte_retturn', 'TaxNet', 'tax_rate', 'notes',
-        'total_retturn', 'warehouse_id', 'user_id', 'statut', 'discount', 'shipping','time',
-        'paid_amount', 'payment_statut', 'created_at', 'updated_at', 'deleted_at','shipping_status','subscription_id'
+        'date',
+        'Ref',
+        'is_pos',
+        'client_id',
+        'GrandTotal',
+        'qte_retturn',
+        'TaxNet',
+        'tax_rate',
+        'notes',
+        'total_retturn',
+        'warehouse_id',
+        'user_id',
+        'statut',
+        'discount',
+        'shipping',
+        'time',
+        'paid_amount',
+        'payment_statut',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'shipping_status',
+        'subscription_id',
+        'organization_id',
     ];
 
     protected $casts = [
@@ -60,4 +81,17 @@ class Sale extends Model
         return $this->belongsTo('App\Models\Warehouse');
     }
 
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('organization', function ($builder) {
+            if (auth()->check()) {
+                $builder->where('organization_id', auth()->user()->organization_id);
+            }
+        });
+    }
 }

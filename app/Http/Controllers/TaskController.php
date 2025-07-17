@@ -162,6 +162,7 @@ class TaskController extends Controller
         ]);
 
         $task = Task::create([
+            'organization_id'  => auth()->user()->organization_id,
             'title'            => $request['title'],
             'start_date'       => $request['start_date'],
             'end_date'         => $request['end_date'],

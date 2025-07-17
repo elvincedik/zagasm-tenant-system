@@ -13,12 +13,18 @@ class EcommerceClient extends Model implements Authenticatable
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'client_id', 'username', 'email', 'status','password'
+        'client_id',
+        'username',
+        'email',
+        'status',
+        'password',
+        'organization_id',
 
     ];
 
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     protected $casts = [
@@ -31,5 +37,19 @@ class EcommerceClient extends Model implements Authenticatable
     public function client()
     {
         return $this->belongsTo('App\Models\Client');
+    }
+
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('organization', function ($builder) {
+            if (auth()->check()) {
+                $builder->where('organization_id', auth()->user()->organization_id);
+            }
+        });
     }
 }

@@ -12,7 +12,10 @@ class Designation extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'designation','department_id','company_id'
+        'designation',
+        'department_id',
+        'company_id',
+        'organization_id',
     ];
 
     protected $casts = [
@@ -29,5 +32,19 @@ class Designation extends Model
     public function department()
     {
         return $this->hasOne('App\Models\Department', 'id', 'department_id');
+    }
+
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('organization', function ($builder) {
+            if (auth()->check()) {
+                $builder->where('organization_id', auth()->user()->organization_id);
+            }
+        });
     }
 }

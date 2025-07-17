@@ -111,6 +111,7 @@ class DepositsController extends BaseController
             ]);
 
             Deposit::create([
+                'organization_id' => auth()->user()->organization_id,
                 'user_id' => Auth::user()->id,
                 'date' => $request['deposit']['date'],
                 'deposit_ref' => $this->getNumberOrder(),

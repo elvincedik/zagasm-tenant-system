@@ -15,7 +15,7 @@ class Attendance extends Model
         'user_id','employee_id','company_id','date','clock_in',
         'clock_in_ip','clock_out_ip',
         'clock_in_out','depart_early','late_time','clock_out',
-        'overtime','total_work','total_rest','status'
+        'overtime','total_work','total_rest','status', 'organization_id',
 
     ];
 
@@ -43,5 +43,18 @@ class Attendance extends Model
         return $this->hasOne('App\Models\Company', 'id', 'company_id');
     }
 
+    // public function organization()
+    // {
+    //     return $this->belongsTo(Organization::class);
+    // }
+
+    // protected static function booted()
+    // {
+    //     static::addGlobalScope('organization', function ($builder) {
+    //         if (auth()->check()) {
+    //             $builder->where('organization_id', auth()->user()->organization_id);
+    //         }
+    //     });
+    // }
 
 }

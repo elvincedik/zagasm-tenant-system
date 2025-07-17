@@ -16,8 +16,8 @@ class Subscription extends Model
         'client_id',
         'product_id',
         'warehouse_id', // Warehouse selection added
-        'total_cycles', 
-        'cycle_type',// e.g., 12 for monthly (1 year), 52 for weekly
+        'total_cycles',
+        'cycle_type', // e.g., 12 for monthly (1 year), 52 for weekly
         'billing_cycle', // monthly, weekly, yearly
         'remaining_cycles', // Decreases with each payment
         'price_per_cycle',
@@ -25,6 +25,7 @@ class Subscription extends Model
         'quantity',
         'next_billing_date',
         'status', // active, canceled, 
+        'organization_id',
     ];
 
     protected $casts = [
@@ -80,12 +81,13 @@ class Subscription extends Model
                 'shipping_status' => 'pending',
             ]);
 
-             // Fetch product unit for sale
+            // Fetch product unit for sale
             $product = Product::with('unitSale')->where('id', $this->product_id)->first();
             $unit = $product?->unitSale?->id ?? null;
 
             // Create Sale Detail
             SaleDetail::create([
+                'organization_id' => auth()->user()->organization_id,
                 'sale_id' => $sale->id,
                 'date' => now(),
                 'sale_unit_id' => $unit,
@@ -100,4 +102,17 @@ class Subscription extends Model
         }
     }
 
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('organization', function ($builder) {
+            if (auth()->check()) {
+                $builder->where('organization_id', auth()->user()->organization_id);
+            }
+        });
+    }
 }

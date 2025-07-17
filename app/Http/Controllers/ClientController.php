@@ -148,6 +148,7 @@ class ClientController extends BaseController
             'country' => $request['country'],
             'city' => $request['city'],
             'tax_number' => $request['tax_number'],
+            'organization_id' => auth()->user()->organization_id,
         ]);
         return response()->json(['success' => true]);
     }

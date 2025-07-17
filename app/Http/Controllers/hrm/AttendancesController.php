@@ -143,6 +143,7 @@ class AttendancesController extends Controller
         if($shift_in == null){
             $data['employee_id'] = $employee_id;
             $data['company_id'] = $company_id;
+            $data['organization_id'] = auth()->user()->organization_id;
             $data['date'] = $date;
             $data['clock_in'] = $clock_in->format('H:i');
             $data['clock_out'] = $clock_out->format('H:i');
@@ -200,6 +201,7 @@ class AttendancesController extends Controller
 
             $data['clock_in_ip'] = '';
             $data['clock_out_ip'] = '';
+            $data['organization_id'] = auth()->user()->organization_id;
 
 
         Attendance::create($data);

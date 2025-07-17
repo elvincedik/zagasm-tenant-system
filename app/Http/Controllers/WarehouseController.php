@@ -68,6 +68,8 @@ class WarehouseController extends Controller
         \DB::transaction(function () use ($request) {
 
             $Warehouse          = new Warehouse;
+            
+            $Warehouse->organization_id = auth()->user()->organization_id;
             $Warehouse->name    = $request['name'];
             $Warehouse->mobile  = $request['mobile'];
             $Warehouse->country = $request['country'];

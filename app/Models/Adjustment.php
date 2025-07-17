@@ -42,6 +42,11 @@ class Adjustment extends Model
         return $this->belongsTo('App\Models\Warehouse');
     }
 
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
     protected static function booted()
     {
         static::addGlobalScope('organization', function ($builder) {

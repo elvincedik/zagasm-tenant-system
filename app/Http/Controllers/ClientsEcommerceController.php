@@ -109,6 +109,7 @@ class ClientsEcommerceController extends BaseController
                     'email'     => $request['email'],
                     'password'  => Hash::make($request['password']),
                     'status'    => 1,
+                    'organization_id' => auth()->user()->organization_id,
                 ]);
     
             }, 10);

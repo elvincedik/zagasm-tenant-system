@@ -85,6 +85,7 @@ class DesignationsController extends Controller
         ]);
 
         Designation::create([
+            'organization_id' => auth()->user()->organization_id,
             'designation'   => $request['designation'],
             'company_id'    => $request['company_id'],
             'department_id' => $request['department'],

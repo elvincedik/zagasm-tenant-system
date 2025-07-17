@@ -178,6 +178,7 @@ class AdjustmentController extends BaseController
             $i = 0;
             foreach ($data as $key => $value) {
                 $orderDetails[] = [
+                    'organization_id' => auth()->user()->organization_id,
                     'adjustment_id' => $order->id,
                     'quantity' => $value['quantity'],
                     'product_id' => $value['product_id'],
@@ -639,6 +640,7 @@ class AdjustmentController extends BaseController
                 $orderDetails['product_id'] = $product_detail['product_id'];
                 $orderDetails['product_variant_id'] = $product_detail['product_variant_id'];
                 $orderDetails['type'] = $product_detail['type'];
+                $orderDetails['organization_id'] = auth()->user()->organization_id;
 
                 if (!in_array($product_detail['id'], $old_products_id)) {
                     AdjustmentDetail::Create($orderDetails);

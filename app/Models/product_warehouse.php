@@ -9,7 +9,11 @@ class product_warehouse extends Model
     protected $table = 'product_warehouse';
 
     protected $fillable = [
-        'product_id', 'warehouse_id', 'qte','manage_stock'
+        'product_id',
+        'warehouse_id',
+        'qte',
+        'manage_stock',
+        'organization_id',
     ];
 
     protected $casts = [
@@ -34,4 +38,17 @@ class product_warehouse extends Model
         return $this->belongsTo('App\Models\ProductVariant');
     }
 
+    // public function organization()
+    // {
+    //     return $this->belongsTo(Organization::class);
+    // }
+
+    // protected static function booted()
+    // {
+    //     static::addGlobalScope('organization', function ($builder) {
+    //         if (auth()->check()) {
+    //             $builder->where('organization_id', auth()->user()->organization_id);
+    //         }
+    //     });
+    // }
 }

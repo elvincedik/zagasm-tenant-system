@@ -40,6 +40,11 @@ class CountStock extends Model
         return $this->belongsTo('App\Models\Category');
     }
 
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
     protected static function booted()
     {
         static::addGlobalScope('organization', function ($builder) {

@@ -63,6 +63,7 @@ class CompanyController extends Controller
         ]);
 
         Company::create([
+            'organization_id' => auth()->user()->organization_id,
             'name'    => $request['name'],
             'email'   => $request['email'],
             'phone'   => $request['phone'],

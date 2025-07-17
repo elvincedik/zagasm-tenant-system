@@ -67,6 +67,7 @@ class CategoryExpenseController extends BaseController
         ]);
 
         ExpenseCategory::create([
+            'organization_id' => auth()->user()->organization_id,
             'user_id' => Auth::user()->id,
             'description' => $request['description'],
             'name' => $request['name'],

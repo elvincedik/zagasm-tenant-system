@@ -78,6 +78,7 @@ class DepartmentsController extends Controller
         ]);
 
         Department::create([
+            'organization_id' => auth()->user()->organization_id,
             'department'        => $request['department'],
             'company_id'        => $request['company_id'],
             'department_head'   => $request['department_head']?$request['department_head']:Null,

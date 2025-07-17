@@ -129,6 +129,7 @@ class SubscriptionController extends BaseController
 
          // Create new subscription
          $subscription = Subscription::create([
+            'organization_id'   => auth()->user()->organization_id,
             'date'              => now(),
             'user_id'           => auth()->id(),
             'client_id'         => $data['client_id'],

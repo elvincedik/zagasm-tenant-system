@@ -125,6 +125,7 @@ class TransferController extends BaseController
         \DB::transaction(function () use ($request) {
             $order = new Transfer;
 
+            $order->organization_id = auth()->user()->organization_id;
             $order->date = $request->transfer['date'];
             $order->Ref = $this->getNumberOrder();
             $order->from_warehouse_id = $request->transfer['from_warehouse'];
@@ -540,6 +541,7 @@ class TransferController extends BaseController
                     $TransDetail['discount'] = $product_detail['discount'];
                     $TransDetail['discount_method'] = $product_detail['discount_Method'];
                     $TransDetail['total'] = $product_detail['subtotal'];
+                    $TransDetail['organization_id'] = auth()->user()->organization_id;
 
                     if (!in_array($product_detail['id'], $old_products_id)) {
                         TransferDetail::Create($TransDetail);

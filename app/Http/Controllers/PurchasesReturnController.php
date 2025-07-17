@@ -174,6 +174,7 @@ class PurchasesReturnController extends BaseController
         \DB::transaction(function () use ($request) {
             $order = new PurchaseReturn;
 
+            $order->organization_id = auth()->user()->organization_id;
             $order->date = $request->date;
             $order->time = now()->toTimeString();
             $order->Ref = $this->getNumberOrder();
@@ -394,6 +395,7 @@ class PurchasesReturnController extends BaseController
                     $orderDetails['product_variant_id'] = $product_detail['product_variant_id'];
                     $orderDetails['total'] = $product_detail['subtotal'];
                     $orderDetails['imei_number'] = $product_detail['imei_number'];
+                    $orderDetails['organization_id'] = auth()->user()->organization_id;
 
                     if (!in_array($product_detail['id'], $old_products_id)) {
                         PurchaseReturnDetails::Create($orderDetails);

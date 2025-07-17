@@ -172,6 +172,7 @@ class ProjectController extends Controller
         ]);
 
         $project  = Project::create([
+            'organization_id' => auth()->user()->organization_id,
             'title'            => $request['title'],
             'start_date'       => $request['start_date'],
             'end_date'         => $request['end_date'],

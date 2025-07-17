@@ -262,6 +262,7 @@ class QuotationsController extends BaseController
                 $QuoteDetail['discount_method']    = $product_detail['discount_Method'];
                 $QuoteDetail['total']              = $product_detail['subtotal'];
                 $QuoteDetail['imei_number']        = $product_detail['imei_number'];
+                $QuoteDetail['organization_id'] = auth()->user()->organization_id;
 
                 if (!in_array($product_detail['id'], $old_detail_id)) {
                     QuotationDetail::Create($QuoteDetail);

@@ -11,7 +11,16 @@ class PaymentSale extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'sale_id', 'date', 'montant', 'Ref','change', 'payment_method_id', 'user_id', 'notes','account_id'
+        'sale_id',
+        'date',
+        'montant',
+        'Ref',
+        'change',
+        'payment_method_id',
+        'user_id',
+        'notes',
+        'account_id',
+        'organization_id',
     ];
 
     protected $casts = [
@@ -44,4 +53,17 @@ class PaymentSale extends Model
         return $this->belongsTo('App\Models\Sale');
     }
 
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('organization', function ($builder) {
+            if (auth()->check()) {
+                $builder->where('organization_id', auth()->user()->organization_id);
+            }
+        });
+    }
 }

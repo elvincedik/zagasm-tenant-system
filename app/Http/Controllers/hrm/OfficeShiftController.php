@@ -111,6 +111,7 @@ class OfficeShiftController extends Controller
         $sunday_out = new DateTime($request['sunday_out']);
 
         OfficeShift::create([
+            'organization_id' => auth()->user()->organization_id,
             'company_id'     => $request['company_id'],
             'name'           => $request['name'],
             'monday_in'      => $request['monday_in']?$monday_in->format('H:iA'):Null,

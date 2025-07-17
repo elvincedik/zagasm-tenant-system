@@ -61,6 +61,7 @@ class CurrencyController extends Controller
         ]);
 
         Currency::create([
+            'organization_id' => auth()->user()->organization_id,
             'name' => $request['name'],
             'code' => $request['code'],
             'symbol' => $request['symbol'],

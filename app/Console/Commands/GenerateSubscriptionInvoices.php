@@ -67,6 +67,7 @@ class GenerateSubscriptionInvoices extends Command
                 Log::error("Failed sending SMS for subscription #{$subscription->id}: " . $e->getMessage());
 
                 ErrorLog::create([
+                    'organization_id' => auth()->user()->organization_id,
                     'context' => 'SMS after auto-charge success',
                     'message' => "Failed sending SMS for subscription #{$subscription->id}",
                     'details' => json_encode([
