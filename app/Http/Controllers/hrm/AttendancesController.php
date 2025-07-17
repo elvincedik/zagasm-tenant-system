@@ -201,6 +201,7 @@ class AttendancesController extends Controller
 
             $data['clock_in_ip'] = '';
             $data['clock_out_ip'] = '';
+            $data['organization_id'] = auth()->user()->organization_id;
 
 
         Attendance::create($data);

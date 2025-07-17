@@ -17,7 +17,7 @@ return new class extends Migration
                 $table->unsignedBigInteger('organization_id')->after('id')->nullable(); // make it nullable
 
                 // Optional: add foreign key constraint
-                // $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('cascade');
+                $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('cascade');
             });
         }
     }

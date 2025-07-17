@@ -28,6 +28,11 @@ class Account extends Model
         'balance' => 'double',
     ];
 
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
     protected static function booted()
     {
         static::addGlobalScope('organization', function ($builder) {

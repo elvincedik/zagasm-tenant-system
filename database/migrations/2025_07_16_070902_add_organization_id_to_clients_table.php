@@ -12,8 +12,8 @@ return new class extends Migration
     public function up()
     {
         // Only add column if it doesn't already exist
-        if (!Schema::hasColumn('shipments', 'organization_id')) {
-            Schema::table('shipments', function (Blueprint $table) {
+        if (!Schema::hasColumn('clients', 'organization_id')) {
+            Schema::table('clients', function (Blueprint $table) {
                 $table->unsignedBigInteger('organization_id')->after('id')->nullable(); // make it nullable
 
                 // Optional: add foreign key constraint
@@ -26,8 +26,8 @@ return new class extends Migration
     public function down()
     {
         // Only drop column if it exists
-        if (Schema::hasColumn('shipments', 'organization_id')) {
-            Schema::table('shipments', function (Blueprint $table) {
+        if (Schema::hasColumn('clients', 'organization_id')) {
+            Schema::table('clients', function (Blueprint $table) {
                 $table->dropForeign(['organization_id']);
                 $table->dropColumn('organization_id');
             });
