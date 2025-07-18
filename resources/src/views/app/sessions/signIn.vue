@@ -153,7 +153,7 @@ export default {
               this.$t("Success")
             );
 
-          window.location = '/';
+          window.location = '/app/dashboard';
            
           NProgress.done();
           this.loading = false;
